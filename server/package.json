@@ -1,0 +1,28 @@
+{
+  "name": "ecommerce-server",
+  "type": "module",
+  "dependencies": {
+    "@elysiajs/cors": "^1.4.0",
+    "@prisma/client": "^6.15.0",
+    "@types/bcrypt": "^6.0.0",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.2.1",
+    "elysia": "^1.3.20",
+    "jsonwebtoken": "^9.0.2",
+    "pino": "^9.9.0",
+    "prisma": "^6.15.0"
+  },
+  "scripts": {
+    "start": "bun run src/server.ts",
+    "dev": "bun --watch src/server.ts",
+    "build": "tsc",
+    "prisma:generate": "prisma generate",
+    "prisma:push": "prisma db push"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^24.3.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}
