@@ -2,67 +2,54 @@
 export const API_CONFIG = {
   BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001/api/v1',
   ENDPOINTS: {
+    // Menu endpoints
+    MENU: {
+      CATEGORIES: '/menu/categories',
+      ITEMS: '/menu/items',
+      ITEM_BY_ID: (id: number) => `/menu/items/${id}`,
+    },
     // Product endpoints
     PRODUCTS: {
       LIST: '/products',
       BY_ID: (id: number) => `/products/${id}`,
-      SEARCH: '/products/search',
-      CREATE: '/products',
-      UPDATE: (id: number) => `/products/${id}`,
-      DELETE: (id: number) => `/products/${id}`,
-    },
-    // User endpoints
-    USERS: {
-      SIGNUP: '/users/signup',
-      LOGIN: '/users/login',
-      LIST: '/users',
-      BY_ID: (id: number) => `/users/${id}`,
-      UPDATE: (id: number) => `/users/${id}`,
-      DELETE: (id: number) => `/users/${id}`,
-    },
-    // Admin endpoints
-    ADMINS: {
-      SIGNUP: '/admins/signup',
-      LOGIN: '/admins/login',
-      BY_ID: (id: number) => `/admins/${id}`,
-      UPDATE: (id: number) => `/admins/${id}`,
-      DELETE: (id: number) => `/admins/${id}`,
-      CATEGORIES: {
-        CREATE: '/admins/categories',
-      }
+      BY_CATEGORY: (categoryId: number) => `/products/category/${categoryId}`,
     },
     // Cart endpoints
     CART: {
       GET: '/cart',
-      ADD: '/cart',
-      UPDATE: (id: number) => `/cart/${id}`,
-      REMOVE: (id: number) => `/cart/${id}`,
-      CLEAR: '/cart',
-      TOTAL: '/cart/total',
-      SELECT: '/cart/select',
-      CHECKOUT_PREVIEW: '/cart/checkout/preview',
-      CHECKOUT: '/cart/checkout',
-    },
-    // Wishlist endpoints
-    WISHLIST: {
-      ADD: '/cart/wishlist',
-      GET: '/cart/wishlist',
+      ADD: '/cart/add',
+      UPDATE: '/cart/update',
+      REMOVE: '/cart/remove',
+      CLEAR: '/cart/clear',
     },
     // Order endpoints
     ORDERS: {
-      USER_ORDERS: '/orders/user',
-      USER_ORDER_BY_ID: (id: number) => `/orders/user/${id}`,
-      CANCEL: '/orders/user/cancel',
-      ADMIN_UPDATE_STATUS: (id: number) => `/orders/admin/${id}/status`,
+      CREATE: '/orders',
+      LIST: '/orders',
+      BY_ID: (id: string) => `/orders/${id}`,
     },
-    // Review endpoints
-    REVIEWS: {
-      PRODUCT_REVIEWS: (productId: number) => `/reviews/product/${productId}`,
-      MY_REVIEWS: '/reviews/my-reviews',
-      CREATE: '/reviews',
-      UPDATE: (id: number) => `/reviews/${id}`,
-      DELETE: (id: number) => `/reviews/${id}`,
+    // Checkout endpoints
+    CHECKOUT: {
+      PROCESS: '/checkout/process',
     },
+    // Profile endpoints
+    PROFILE: {
+      GET: '/profile',
+      UPDATE: '/profile',
+      AVATAR: '/profile/avatar',
+    },
+    // Auth endpoints
+    AUTH: {
+      LOGIN: '/auth/login',
+      REGISTER: '/auth/register',
+      LOGOUT: '/auth/logout',
+      REFRESH: '/auth/refresh',
+    },
+    // User endpoints
+    USERS: {
+      PROFILE: '/users/profile',
+      UPDATE: '/users/update',
+    }
   }
 };
 
@@ -120,14 +107,6 @@ export class ApiClient {
   async put<T>(endpoint: string, data?: any): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'PUT',
-      body: data ? JSON.stringify(data) : undefined,
-    });
-  }
-
-  // PATCH request
-  async patch<T>(endpoint: string, data?: any): Promise<T> {
-    return this.request<T>(endpoint, {
-      method: 'PATCH',
       body: data ? JSON.stringify(data) : undefined,
     });
   }

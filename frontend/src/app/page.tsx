@@ -9,15 +9,29 @@ import { Footer } from '@/components/layout';
 import { API_CONFIG, apiClient } from '@/config/api';
 import { useEffect, useState } from 'react';
 
+const payload = {
+  "name": "MacBook Air M2",
+  "description": "Lightweight laptop with M2 chip",
+  "price": 45000,
+  "stock": 1,
+  "categoryId": 1,
+  "createdById": 1
+}
+
 const getProducts = async () => {
-  
-  const products = await apiClient.get(API_CONFIG.ENDPOINTS.PRODUCTS.LIST);
+  const products = await apiClient.get<any>(API_CONFIG.ENDPOINTS.PRODUCTS.LIST);
   console.log(products);
+}
+
+const testPostProduct = async () => {
+  const res = await apiClient.post<any>(API_CONFIG.ENDPOINTS.PRODUCTS.LIST, payload);
+  console.log(res);
 }
 
 export default function Home() {
   useEffect(() => {
-    getProducts();
+    testPostProduct();
+    // getProducts();
   }, []);
   return (
     <div className="min-h-screen bg-white">

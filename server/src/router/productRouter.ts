@@ -31,13 +31,15 @@ export const productRoutes = new Elysia()
     
     // Public routes 
     .group("/", app => app
+      .get("/", handleAsyncRoute(() => productService.getAllProducts()))
       .get("", handleAsyncRoute(() => productService.getAllProducts()))
       .post("/search", handleAsyncRoute(({ body }) => productService.searchProductByName({ body })))
     )
 
     // Protected routes 
     .group("/", app => app
-      .use(verifyUserTokenMiddleware())
+      // .use(verifyUserTokenMiddleware())
+      .post("/", handleAsyncRoute(({ body }) => productService.addProduct({ body })))
       .post("", handleAsyncRoute(({ body }) => productService.addProduct({ body })))
     )
     

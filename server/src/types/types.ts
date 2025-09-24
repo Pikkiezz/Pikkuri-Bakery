@@ -4,9 +4,9 @@ export interface CustomError extends Error {
 }
 
 export interface Headers {
-  authorization?: string;
-  'content-type'?: string;
-  'user-agent'?: string;
+  authorization?: any;
+  'content-type'?: any;
+  'user-agent'?: any;
   [key: string]: string | string[] | undefined;
 }
 

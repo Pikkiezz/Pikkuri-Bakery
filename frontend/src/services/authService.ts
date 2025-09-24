@@ -107,7 +107,9 @@ export class AuthService {
     try {
       const refreshToken = this.getRefreshToken();
       if (refreshToken) {
-        await apiClient.post('/auth/logout', { refreshToken });
+        // TODO: Implement logout API when backend is ready
+        // await apiClient.post(API_CONFIG.ENDPOINTS.AUTH.LOGOUT, { refreshToken });
+        console.log('Logout (mock implementation)');
       }
     } catch (error) {
       console.error('Logout error:', error);
@@ -124,9 +126,11 @@ export class AuthService {
         throw new Error('No refresh token available');
       }
 
-      const response = await apiClient.post<AuthResponse>('/auth/refresh', { refreshToken });
-      this.storeAuthData(response);
-      return response;
+      // TODO: Implement refresh token API when backend is ready
+      // const response = await apiClient.post<AuthResponse>(API_CONFIG.ENDPOINTS.AUTH.REFRESH, { refreshToken });
+      // this.storeAuthData(response);
+      // return response;
+      throw new Error('Refresh token not implemented yet');
     } catch (error) {
       console.error('Token refresh failed:', error);
       this.clearAuthData();
@@ -154,7 +158,9 @@ export class AuthService {
   // Forgot password
   async forgotPassword(email: string): Promise<void> {
     try {
-      await apiClient.post('/auth/forgot-password', { email });
+      // TODO: Implement forgot password API when backend is ready
+      // await apiClient.post(API_CONFIG.ENDPOINTS.AUTH.FORGOT_PASSWORD, { email });
+      console.log('Forgot password (mock implementation)');
     } catch (error) {
       console.error('Forgot password failed:', error);
       throw new Error('Failed to send reset email. Please try again.');
@@ -164,7 +170,9 @@ export class AuthService {
   // Reset password
   async resetPassword(token: string, newPassword: string): Promise<void> {
     try {
-      await apiClient.post('/auth/reset-password', { token, newPassword });
+      // TODO: Implement reset password API when backend is ready
+      // await apiClient.post(API_CONFIG.ENDPOINTS.AUTH.RESET_PASSWORD, { token, newPassword });
+      console.log('Reset password (mock implementation)');
     } catch (error) {
       console.error('Reset password failed:', error);
       throw new Error('Failed to reset password. Please try again.');

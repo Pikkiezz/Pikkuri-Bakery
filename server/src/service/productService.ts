@@ -39,6 +39,7 @@ export const getAllProducts = async () => {
 };
 
 export const addProduct = async ({ body }: { body: CreateProductBody }) => {
+  console.log(body);
   try {
     // Validate required fields
     if (!body.name) {

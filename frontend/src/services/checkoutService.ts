@@ -26,11 +26,24 @@ export interface CheckoutResponse {
 export class CheckoutService {
   async processCheckout(data: CheckoutRequest): Promise<CheckoutResponse> {
     try {
-      const response = await apiClient.post<CheckoutResponse>(
-        '/checkout/process',
-        data
-      );
-      return response;
+      // TODO: Implement checkout API when backend is ready
+      // const response = await apiClient.post<CheckoutResponse>(
+      //   API_CONFIG.ENDPOINTS.CHECKOUT.PROCESS,
+      //   data
+      // );
+      // return response;
+      
+      // Mock implementation
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            orderId: `ORDER-${Date.now()}`,
+            status: 'pending',
+            message: 'Order placed successfully (mock)',
+            trackingNumber: `TRK-${Date.now()}`
+          });
+        }, 1000);
+      });
     } catch (error) {
       console.error('Checkout failed:', error);
       throw new Error('Failed to process checkout. Please try again.');
@@ -39,8 +52,22 @@ export class CheckoutService {
 
   async getOrderById(orderId: string): Promise<any> {
     try {
-      const response = await apiClient.get(`/orders/${orderId}`);
-      return response;
+      // TODO: Implement get order API when backend is ready
+      // const response = await apiClient.get(API_CONFIG.ENDPOINTS.ORDERS.BY_ID(orderId));
+      // return response;
+      
+      // Mock implementation
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            id: orderId,
+            status: 'pending',
+            total: 0,
+            items: [],
+            createdAt: new Date().toISOString()
+          });
+        }, 500);
+      });
     } catch (error) {
       console.error('Failed to fetch order:', error);
       throw new Error('Failed to fetch order details.');
