@@ -3,7 +3,6 @@
 interface Category {
   id: number;
   name: string;
-  emoji: string;
 }
 
 interface CategoryFilterProps {
@@ -24,7 +23,7 @@ const CategoryFilter = ({ categories, selectedCategory, onCategorySelect }: Cate
             : 'bg-white/80 text-stone-700 hover:bg-stone-100 border-2 border-stone-300'
         }`}
       >
-        🍽️ All Items
+        All Items
       </button>
 
       {/* Category Buttons */}
@@ -38,7 +37,7 @@ const CategoryFilter = ({ categories, selectedCategory, onCategorySelect }: Cate
               : 'bg-white/80 text-stone-700 hover:bg-stone-100 border-2 border-stone-300'
           }`}
         >
-          {category.emoji} {category.name}
+          {category.name}
         </button>
       ))}
     </div>

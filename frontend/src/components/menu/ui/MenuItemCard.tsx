@@ -5,46 +5,33 @@ import { useCart } from '@/contexts/CartContext';
 
 
 
-interface MenuItem {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  image?: string;
-  emoji?: string;
-  category: string;
-  isVegetarian?: boolean;
-  isVegan?: boolean;
-  isGlutenFree?: boolean;
-  isDairyFree?: boolean;
-  rating?: number;
-  reviews?: number;
-}
+import type { ProductResponse } from '@/types';
 
 interface MenuItemCardProps {
-  item: MenuItem;
+  item: ProductResponse;
   quantity: number;
   onQuantityChange?: (itemId: number, change: number) => void;
 }
 
 const MenuItemCard = ({ item, quantity, onQuantityChange }: MenuItemCardProps) => {
   const { addToCart } = useCart();
+  console.log('THIS IS THE ITEM', item);
   return (
     <div className="group">
       <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105 transform hover:-translate-y-2 border border-stone-200/50">
         {/* Product Image */}
         <div className="relative mb-6">
           <div className="w-full h-48 rounded-xl overflow-hidden shadow-lg">
-            {item.image ? (
+            {item.imageUrl ? (
               <img 
-                src={item.image} 
+                src={item.imageUrl} 
                 alt={item.name}
                 className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
               />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-stone-200 to-amber-200 flex items-center justify-center">
                 <span className="text-8xl animate-pulse">
-                  {item.emoji || '🍽️'}
+                  {'🍽️'}
                 </span>
               </div>
             )}
@@ -101,14 +88,7 @@ const MenuItemCard = ({ item, quantity, onQuantityChange }: MenuItemCardProps) =
               if (onQuantityChange) {
                 onQuantityChange(item.id, -quantity);
               }
-              addToCart({
-                id: item.id,
-                name: item.name,
-                price: item.price,
-                image: item.image,
-                emoji: item.emoji,
-                quantity: quantity // ← ส่ง quantity ที่เลือกไว้
-              });
+              addToCart(item.id, quantity);
             }}
           >
             {onQuantityChange 

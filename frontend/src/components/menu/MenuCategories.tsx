@@ -5,41 +5,27 @@ import { useFilter } from '@/contexts/FilterContext';
 import { MenuItemCard, CategoryFilter, MenuSort } from './ui';
 import { useProduct } from '@/contexts/ProductContext';
 import { useCategory } from '@/contexts/CategoryContext';
+
 import type { ProductResponse } from '@/types';
+
+
 const MenuCategories = () => {
   const { filters, setSelectedCategory } = useFilter();
   const {productsData} = useProduct();
   const {categories} = useCategory();
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
 
-  // Transform categories for filter with emojis
-  const categoriesForFilter = categories.map(category => ({
+  // Transform categories for filter
+  console.log('Categories from useCategory:', categories);
+  const categoriesForFilter = categories?.map(category => ({
     id: category.id,
-    name: category.name,
-    emoji: getCategoryEmoji(category.name)
-  }));
-
-  // Helper function to get emoji for category
-  function getCategoryEmoji(categoryName: string): string {
-    const emojiMap: { [key: string]: string } = {
-      'Croissants & Pastries': '🥐',
-      'Beverages': '☕',
-      'Sandwiches': '🥪',
-      'Desserts': '🍰',
-      'Salads': '🥗',
-      'Bread': '🍞',
-      'Cakes': '🎂',
-      'Cookies': '🍪',
-      'Coffee': '☕',
-      'Tea': '🍵',
-      'Juice': '🧃',
-      'Smoothie': '🥤'
-    };
-    return emojiMap[categoryName] || '🍽️';
-  }
+    name: category.name
+  })) || [];
+  console.log('Categories for filter:', categoriesForFilter);
 
   // Get all items from all categories
   const allItems = productsData?.response || [];
+
 
   // Filter and sort all items
   const filteredAndSortedItems = allItems.filter(item => {

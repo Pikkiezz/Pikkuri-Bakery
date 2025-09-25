@@ -39,19 +39,19 @@ export default function RootLayout({
           <body
             className={`${fredoka.variable} ${quicksand.variable} ${poppins.variable} antialiased bg-white`}
           >
-                  <FilterProvider>
-                    <AuthProvider>
-                      <CategoryProvider>
-                        <ProductProvider>
+                  <AuthProvider>
+                    <CategoryProvider>
+                      <ProductProvider>
+                        <FilterProvider>
                           <CartProvider>
                             <ProfileProvider>
                               {children}
                             </ProfileProvider>
                           </CartProvider>
-                        </ProductProvider>
-                      </CategoryProvider>
-                    </AuthProvider>
-                  </FilterProvider>
+                        </FilterProvider>
+                      </ProductProvider>
+                    </CategoryProvider>
+                  </AuthProvider>
           </body>
         </html>
   );

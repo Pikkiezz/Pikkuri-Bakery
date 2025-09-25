@@ -1,23 +1,18 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useProduct } from './ProductContext';
+import { useCategory } from './CategoryContext';
 
 // Types
 interface FilterState {
   selectedCategory: number | null;
-  searchQuery: string;
-  sortBy: 'name' | 'price' | 'rating';
+  searchTerm: string;
+  sortBy: 'name' | 'price' | 'newest';
   sortOrder: 'asc' | 'desc';
   priceRange: {
     min: number;
     max: number;
-  };
-  // Menu specific filters
-  menuFilters: {
-    showVegetarian: boolean;
-    showVegan: boolean;
-    showGlutenFree: boolean;
-    showDairyFree: boolean;
   };
 }
 
@@ -25,29 +20,21 @@ interface FilterContextType {
   filters: FilterState;
   setSelectedCategory: (categoryId: number | null) => void;
   setSearchQuery: (query: string) => void;
-  setSortBy: (sortBy: 'name' | 'price' | 'rating') => void;
+  setSortBy: (sortBy: 'name' | 'price' | 'newest') => void;
   setSortOrder: (order: 'asc' | 'desc') => void;
   setPriceRange: (range: { min: number; max: number }) => void;
-  setMenuFilter: (filter: keyof FilterState['menuFilters'], value: boolean) => void;
   clearFilters: () => void;
-  clearMenuFilters: () => void;
 }
 
 // Initial state
 const initialState: FilterState = {
   selectedCategory: null,
-  searchQuery: '',
+  searchTerm: '',
   sortBy: 'name',
   sortOrder: 'asc',
   priceRange: {
     min: 0,
-    max: 100
-  },
-  menuFilters: {
-    showVegetarian: false,
-    showVegan: false,
-    showGlutenFree: false,
-    showDairyFree: false
+    max: 1000
   }
 };
 
@@ -57,16 +44,35 @@ const FilterContext = createContext<FilterContextType | undefined>(undefined);
 // Provider component
 export const FilterProvider = ({ children }: { children: ReactNode }) => {
   const [filters, setFilters] = useState<FilterState>(initialState);
+  const { productsData } = useProduct();
+  const { categories } = useCategory();
+
+  // Update price range based on actual product data
+  useEffect(() => {
+    if (productsData?.response && productsData.response.length > 0) {
+      const prices = productsData.response.map(product => product.price);
+      const minPrice = Math.min(...prices);
+      const maxPrice = Math.max(...prices);
+      
+      setFilters(prev => ({
+        ...prev,
+        priceRange: {
+          min: minPrice,
+          max: maxPrice
+        }
+      }));
+    }
+  }, [productsData]);
 
   const setSelectedCategory = (categoryId: number | null) => {
     setFilters(prev => ({ ...prev, selectedCategory: categoryId }));
   };
 
   const setSearchQuery = (query: string) => {
-    setFilters(prev => ({ ...prev, searchQuery: query }));
+    setFilters(prev => ({ ...prev, searchTerm: query }));
   };
 
-  const setSortBy = (sortBy: 'name' | 'price' | 'rating') => {
+  const setSortBy = (sortBy: 'name' | 'price' | 'newest') => {
     setFilters(prev => ({ ...prev, sortBy }));
   };
 
@@ -78,28 +84,16 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
     setFilters(prev => ({ ...prev, priceRange: range }));
   };
 
-  const setMenuFilter = (filter: keyof FilterState['menuFilters'], value: boolean) => {
-    setFilters(prev => ({
-      ...prev,
-      menuFilters: {
-        ...prev.menuFilters,
-        [filter]: value
-      }
-    }));
-  };
-
   const clearFilters = () => {
-    setFilters(initialState);
-  };
-
-  const clearMenuFilters = () => {
     setFilters(prev => ({
       ...prev,
-      menuFilters: {
-        showVegetarian: false,
-        showVegan: false,
-        showGlutenFree: false,
-        showDairyFree: false
+      selectedCategory: null,
+      searchTerm: '',
+      sortBy: 'name',
+      sortOrder: 'asc',
+      priceRange: {
+        min: productsData?.response ? Math.min(...productsData.response.map(p => p.price)) : 0,
+        max: productsData?.response ? Math.max(...productsData.response.map(p => p.price)) : 1000
       }
     }));
   };
@@ -112,9 +106,7 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
       setSortBy,
       setSortOrder,
       setPriceRange,
-      setMenuFilter,
-      clearFilters,
-      clearMenuFilters
+      clearFilters
     }}>
       {children}
     </FilterContext.Provider>

@@ -21,7 +21,7 @@ interface CartState {
 
 interface CartContextType {
   state: CartState;
-  addToCart: (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => Promise<void>;
+  addToCart: (productId: number, quantity?: number) => Promise<void>;
   removeFromCart: (id: number) => Promise<void>;
   updateQuantity: (id: number, quantity: number) => Promise<void>;
   clearCart: () => Promise<void>;
@@ -84,19 +84,19 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Add item to cart
-  const addToCart = async (item: Omit<CartItem, 'quantity'> & { quantity?: number }) => {
+  const addToCart = async (productId: number, quantity: number = 1) => {
     try {
       setIsLoading(true);
       setError(null);
       
       const request: AddToCartRequest = {
-        productId: item.id,
-        quantity: item.quantity || 1, // ใช้ quantity ที่ส่งมา หรือ default = 1
-        name: item.name,
-        price: item.price,
-        image: item.image,
-        emoji: item.emoji,
-        category: 'General' // Default category, can be improved later
+        productId: productId,
+        quantity: quantity,
+        name: '', // Will be filled by backend
+        price: 0, // Will be filled by backend
+        image: '', // Will be filled by backend
+        emoji: '🍽️', // Default emoji
+        category: 'General' // Default category
       };
       
       await mockCartService.addToCart(request);
