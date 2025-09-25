@@ -58,6 +58,7 @@ import { adminRoutes } from "./router/adminRouter.js";
 import { cartRoutes } from "./router/cartRouter.js";
 import { reviewRoutes } from "./router/reviewRouter.js";
 import { orderRoutes } from "./router/orderRouter.js";
+import { categoryRoutes } from "./router/categoryRouter.js";
 
 dotenv.config({ path: ".env" });
 
@@ -98,6 +99,7 @@ const app = new Elysia()
   .mount("/api/v1/cart", cartRoutes)
   .mount("/api/v1/reviews", reviewRoutes)
   .mount("/api/v1/orders", orderRoutes)
+  .mount("/api/v1/categories", categoryRoutes)
   
   // Add a test route to verify routing is working
   .get("/api/v1/test", ({ set }) => {

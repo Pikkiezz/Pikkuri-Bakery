@@ -52,8 +52,8 @@ export class MenuService {
   // Get all menu categories with items
   async getMenuCategories(): Promise<MenuCategory[]> {
     try {
-      const response = await apiClient.get<MenuCategory[]>(API_CONFIG.ENDPOINTS.MENU.CATEGORIES);
-      return response;
+      const response = await apiClient.get<{ data: MenuCategory[] }>(API_CONFIG.ENDPOINTS.PRODUCTS.CATEGORIES);
+      return response.data!;
     } catch (error) {
       console.error('Failed to fetch menu categories:', error);
       throw new Error('Failed to fetch menu categories');
@@ -73,7 +73,7 @@ export class MenuService {
         });
       }
 
-      const endpoint = `${API_CONFIG.ENDPOINTS.MENU.ITEMS}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
+      const endpoint = `${API_CONFIG.ENDPOINTS.PRODUCTS.LIST}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
       const response = await apiClient.get<MenuResponse>(endpoint);
       return response;
     } catch (error) {
@@ -83,9 +83,9 @@ export class MenuService {
   }
 
   // Get single menu item by ID
-  async getMenuItemById(id: number): Promise<MenuItem> {
+  async getMenuItemById(id: number): Promise<ProductResponse> {
     try {
-      const response = await apiClient.get<MenuItem>(API_CONFIG.ENDPOINTS.MENU.ITEM_BY_ID(id));
+      const response = await apiClient.get<ProductResponse>(API_CONFIG.ENDPOINTS.PRODUCTS.BY_ID(id));
       return response;
     } catch (error) {
       console.error(`Failed to fetch menu item ${id}:`, error);

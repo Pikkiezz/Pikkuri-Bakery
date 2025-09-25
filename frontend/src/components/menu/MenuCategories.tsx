@@ -2,27 +2,73 @@
 
 import { useState } from 'react';
 import { useFilter } from '@/contexts/FilterContext';
-import { MenuItemCard, CategoryHeader, CategoryFilter, MenuSort } from './ui';
-import { menuCategories, categoriesForFilter, filterMenuItems, sortMenuItems } from '@/data/menuData';
-
+import { MenuItemCard, CategoryFilter, MenuSort } from './ui';
+import { useProduct } from '@/contexts/ProductContext';
+import { useCategory } from '@/contexts/CategoryContext';
+import type { ProductResponse } from '@/types';
 const MenuCategories = () => {
   const { filters, setSelectedCategory } = useFilter();
+  const {productsData} = useProduct();
+  const {categories} = useCategory();
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
 
-  // Filter categories based on selection
-  const filteredCategories = filters.selectedCategory 
-    ? menuCategories.filter(category => category.id === filters.selectedCategory)
-    : menuCategories;
-
-  // Process each category's items with filters and sorting
-  const processedCategories = filteredCategories.map(category => ({
-    ...category,
-    items: sortMenuItems(
-      filterMenuItems(category.items, filters),
-      filters.sortBy,
-      filters.sortOrder
-    )
+  // Transform categories for filter with emojis
+  const categoriesForFilter = categories.map(category => ({
+    id: category.id,
+    name: category.name,
+    emoji: getCategoryEmoji(category.name)
   }));
+
+  // Helper function to get emoji for category
+  function getCategoryEmoji(categoryName: string): string {
+    const emojiMap: { [key: string]: string } = {
+      'Croissants & Pastries': '🥐',
+      'Beverages': '☕',
+      'Sandwiches': '🥪',
+      'Desserts': '🍰',
+      'Salads': '🥗',
+      'Bread': '🍞',
+      'Cakes': '🎂',
+      'Cookies': '🍪',
+      'Coffee': '☕',
+      'Tea': '🍵',
+      'Juice': '🧃',
+      'Smoothie': '🥤'
+    };
+    return emojiMap[categoryName] || '🍽️';
+  }
+
+  // Get all items from all categories
+  const allItems = productsData?.response || [];
+
+  // Filter and sort all items
+  const filteredAndSortedItems = allItems.filter(item => {
+    // Category filter
+    if (filters.selectedCategory && item.categoryId !== filters.selectedCategory) {
+      return false;
+    }
+    // Search filter
+    if (filters.searchTerm) {
+      const searchTerm = filters.searchTerm.toLowerCase();
+      return item.name.toLowerCase().includes(searchTerm) || 
+             (item.description && item.description.toLowerCase().includes(searchTerm));
+    }
+    return true;
+  }).sort((a, b) => {
+    // Sort logic
+    switch (filters.sortBy) {
+      case 'name':
+        return filters.sortOrder === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+      case 'price':
+        return filters.sortOrder === 'asc' ? a.price - b.price : b.price - a.price;
+      case 'newest':
+        return filters.sortOrder === 'asc' ? 
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime() :
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      default:
+        return 0;
+    }
+  });
 
   // Handle quantity update
   const handleQuantityUpdate = (itemId: number, change: number) => {
@@ -40,22 +86,10 @@ const MenuCategories = () => {
     setSelectedCategory(categoryId);
   };
 
-  // Render category items
-  const renderCategoryItems = (category: typeof processedCategories[0]) => (
-    // <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    //   {category.items.map((item, index) => (
-    //     <ProductCard
-    //       key={item.id}
-    //       product={item}
-    //       index={index}
-    //       quantity={getItemQuantity(item.id)}
-    //       onQuantityChange={handleQuantityUpdate}
-    //     />
-    //   ))}
-    // </div>
-
+  // Render all items
+  const renderAllItems = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {category.items.map((item, index) => (
+      {filteredAndSortedItems.map((item, index) => (
         <MenuItemCard
           key={item.id}
           item={item}
@@ -75,22 +109,12 @@ const MenuCategories = () => {
     </div>
   );
 
-  // Render processed categories
-  const renderProcessedCategories = () => (
-    <>
-      {processedCategories.map((category) => (
-        <div key={category.id} className="mb-16">
-          {/* Category Header */}
-          <CategoryHeader
-            name={category.name}
-            emoji={category.emoji}
-          />
-
-          {renderCategoryItems(category)}
-          {category.items.length === 0 && renderNoItemsMessage()}
-        </div>
-      ))}
-    </>
+  // Render all items
+  const renderAllItemsSection = () => (
+    <div className="mb-16">
+      {renderAllItems()}
+      {filteredAndSortedItems.length === 0 && renderNoItemsMessage()}
+    </div>
   );
 
   return (
@@ -106,8 +130,8 @@ const MenuCategories = () => {
           onCategorySelect={handleCategorySelect}
         />
 
-        {/* Processed Categories */}
-        {renderProcessedCategories()}
+        {/* All Items */}
+        {renderAllItemsSection()}
       </div>
     </section>
   );

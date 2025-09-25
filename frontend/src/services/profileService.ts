@@ -23,7 +23,6 @@ export class ProfileService {
     name: 'John Doe',
     email: 'john@example.com',
     phone: '+1234567890',
-    avatar: '/api/placeholder/100/100',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };

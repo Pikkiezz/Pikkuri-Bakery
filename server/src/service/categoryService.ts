@@ -3,6 +3,16 @@ import { ValidationError, NotFoundError, DatabaseError } from "../../utils/error
 import type { CreateCategoryBody, CategoryResponse } from "../types/types.js";
 
 // ------------ Category Services --------
+
+export const getCategories = async () => {
+  try {
+    let response = await db.category.findMany();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const addCategory = async ({ body }: { body: CreateCategoryBody }) => {
   try {
     if (!body.name) {

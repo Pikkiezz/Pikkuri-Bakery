@@ -3,6 +3,7 @@ import * as productService from "../service/productService.js";
 import { handleAsyncRoute } from "../../utils/routeHelpers.js";
 import * as userServices from "../service/userServices.js";
 import { checkIdMiddleware, verifyUserTokenMiddleware } from "../../utils/middleware.js";
+import * as categoryService from "../service/categoryService.js";
 
 
 
@@ -33,6 +34,7 @@ export const productRoutes = new Elysia()
     .group("/", app => app
       .get("/", handleAsyncRoute(() => productService.getAllProducts()))
       .get("", handleAsyncRoute(() => productService.getAllProducts()))
+      .get("/categories", handleAsyncRoute(() => categoryService.getCategories())) 
       .post("/search", handleAsyncRoute(({ body }) => productService.searchProductByName({ body })))
     )
 

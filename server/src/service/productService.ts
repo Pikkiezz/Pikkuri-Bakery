@@ -6,19 +6,60 @@ import { ValidationError, NotFoundError, DatabaseError } from "../../utils/error
 
 export const getAllProducts = async () => {
   try {
-    let response = await db.product.findMany();
-    let popularProducts = await db.product.findMany({
-      orderBy: {
-        stock: "desc",
-      },
-      take: 10,
+    let response = await db.product.findMany({
+      include: {
+        category: {
+          select: {
+            name: true
+          }
+        }
+      }
     });
+    
+    // คำนวณ popular products จาก OrderItem
+    let productsWithOrders = await db.product.findMany({
+      include: {
+        orders: {
+          select: {
+            quantity: true
+          }
+        },
+        category: {
+          select: {
+            name: true
+          }
+        }
+      }
+    });
+
+    // คำนวณ total sold สำหรับแต่ละ product
+    const productsWithSold = productsWithOrders.map(product => {
+      const totalSold = product.orders.reduce((sum, order) => sum + order.quantity, 0);
+      return {
+        ...product,
+        totalSold: totalSold
+      };
+    });
+
+    // เรียงตาม totalSold จากมากไปน้อย และเอาแค่ 5 อันดับแรก
+    let popularProducts = productsWithSold
+      .sort((a, b) => b.totalSold - a.totalSold)
+      .slice(0, 5);
+
     let newProducts = await db.product.findMany({
       orderBy: {
         createdAt: "desc",
       },
       take: 10,
+      include: {
+        category: {
+          select: {
+            name: true
+          }
+        }
+      }
     });
+    
     console.log(response);
     if (!response) {
       throw new NotFoundError("No products found");
@@ -29,6 +70,7 @@ export const getAllProducts = async () => {
         data: {
           response,
           popularProducts,
+          productsWithSold,
           newProducts, 
         },
       };
@@ -60,7 +102,7 @@ export const addProduct = async ({ body }: { body: CreateProductBody }) => {
         name: body.name,
         description: body.description || null,
         price: Number(body.price),
-        stock: 0,
+        stock: Number(body.stock) || 0,
         imageUrl: null,
         categoryId: Number(body.categoryId),
         updatedById: Number(body.createdById),

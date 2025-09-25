@@ -3,70 +3,30 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { ProductCard } from './ui';
+import { useProduct } from '@/contexts/ProductContext';
+import type { ProductResponse } from '@/types';
 
-// Mock data for featured products
-const featuredProducts = [
-  {
-    id: 1,
-    name: 'Buttery Croissants',
-    price: 4.50,
-    originalPrice: 5.50,
-    image: '/api/placeholder/300/300',
-    rating: 4.8,
-    reviews: 124,
-    badge: 'BESTSELLER',
-    emoji: '🥐',
-    description: 'Freshly baked buttery croissants with flaky layers',
-    color: 'from-amber-200 to-orange-200',
-    gradient: 'from-amber-500 to-orange-500'
-  },
-  {
-    id: 2,
-    name: 'Artisan Coffee',
-    price: 3.50,
-    originalPrice: 4.50,
-    image: '/api/placeholder/300/300',
-    rating: 4.6,
-    reviews: 89,
-    badge: 'HOT',
-    emoji: '☕',
-    description: 'Rich and aromatic coffee beans from local roasters',
-    color: 'from-yellow-200 to-amber-200',
-    gradient: 'from-yellow-500 to-amber-500'
-  },
-  {
-    id: 3,
-    name: 'Chocolate Cupcakes',
-    price: 3.00,
-    originalPrice: 3.50,
-    image: '/api/placeholder/300/300',
-    rating: 4.9,
-    reviews: 203,
-    badge: 'NEW',
-    emoji: '🧁',
-    description: 'Moist chocolate cupcakes with creamy frosting',
-    color: 'from-orange-200 to-red-200',
-    gradient: 'from-orange-500 to-red-500',
-    isTopPick: true
-  },
-  {
-    id: 4,
-    name: 'Fresh Bread Loaf',
-    price: 2.50,
-    originalPrice: 3.00,
-    image: '/api/placeholder/300/300',
-    rating: 4.7,
-    reviews: 156,
-    badge: 'FRESH',
-    emoji: '🥖',
-    description: 'Daily baked artisan bread with crispy crust',
-    color: 'from-amber-200 to-yellow-200',
-    gradient: 'from-amber-500 to-yellow-500'
-  }
-];
 
 const FeaturedProducts = () => {
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
+  const { productsData, loading, error } = useProduct();
+
+  const popularProducts = productsData?.popularProducts?.slice(0, 4) || [];
+
+
+  // Transform ProductResponse to Product format for ProductCard
+  const transformProduct = (popularProducts: ProductResponse) => ({
+    id: popularProducts.id,
+    name: popularProducts .name,
+    price: popularProducts.price, 
+    image: popularProducts.imageUrl || '',
+    rating: null,
+    reviews: null,
+    badge: 'BESTSELLER',
+    description: popularProducts.description || '',
+    color: 'from-amber-200 to-orange-200',
+    gradient: 'from-amber-500 to-orange-500'
+  });
 
   const updateQuantity = (productId: number, change: number) => {
     setQuantities(prev => ({
@@ -104,20 +64,35 @@ const FeaturedProducts = () => {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          {featuredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              quantity={getQuantity(product.id)}
-              onQuantityChange={updateQuantity}
-            />
-          ))}
+          {loading ? (
+            <div className="col-span-full text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-600 mx-auto"></div>
+              <p className="mt-4 text-stone-600">Loading products...</p>
+            </div>
+          ) : error ? (
+            <div className="col-span-full text-center py-12">
+              <p className="text-red-600">Error loading products: {error}</p>
+            </div>
+          ) : popularProducts.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <p className="text-stone-600">No products available</p>
+            </div>
+          ) : (
+            popularProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={transformProduct(product)}
+                quantity={getQuantity(product.id)}
+                onQuantityChange={updateQuantity}
+              />
+            ))
+          )}
         </div>
 
         {/* View All Button */}
         <div className="text-center">
           <Link
-            href="/products"
+            href="/menu"
             className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-stone-600 to-amber-600 text-white font-bold rounded-full text-lg transition-all duration-300 hover:scale-110 hover:shadow-2xl transform hover:-translate-y-2"
           >
             🥐 Explore All Bakery Items

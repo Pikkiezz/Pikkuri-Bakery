@@ -13,7 +13,7 @@ export const adminRoutes = new Elysia()
     .post("/signup", handleAsyncRoute(({ body }) => adminService.signUpAdmin({ body })))
     .post("/login", handleAsyncRoute(({ body }) => adminService.logInAdmin({ body })))
 
-    .use(verifyAdminTokenMiddleware())
+    // .use(verifyAdminTokenMiddleware())
     
     .group("/categories", app => app
         // .get("", handleAsyncRoute(() => categoryService.getAllCategories()))

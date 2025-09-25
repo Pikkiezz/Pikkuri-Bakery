@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Fredoka, Quicksand, Poppins } from "next/font/google";
 import "./globals.css";
-import { CartProvider, FilterProvider } from '@/contexts';
+import { CartProvider, FilterProvider, ProductProvider, CategoryProvider } from '@/contexts';
 import { ProfileProvider } from '@/contexts/ProfileContext';
 import { AuthProvider } from '@/contexts/AuthContext';
 
@@ -39,15 +39,19 @@ export default function RootLayout({
           <body
             className={`${fredoka.variable} ${quicksand.variable} ${poppins.variable} antialiased bg-white`}
           >
-            <FilterProvider>
-              <AuthProvider>
-                <CartProvider>
-                  <ProfileProvider>
-                    {children}
-                  </ProfileProvider>
-                </CartProvider>
-              </AuthProvider>
-            </FilterProvider>
+                  <FilterProvider>
+                    <AuthProvider>
+                      <CategoryProvider>
+                        <ProductProvider>
+                          <CartProvider>
+                            <ProfileProvider>
+                              {children}
+                            </ProfileProvider>
+                          </CartProvider>
+                        </ProductProvider>
+                      </CategoryProvider>
+                    </AuthProvider>
+                  </FilterProvider>
           </body>
         </html>
   );

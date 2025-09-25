@@ -68,6 +68,7 @@ export interface Store {
   export interface CreateProductBody {
     name: string;
     price: number;
+    stock: number;
     description: string;
     categoryId: number;
     createdById: number;
