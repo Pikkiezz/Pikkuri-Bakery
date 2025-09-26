@@ -8,10 +8,11 @@ export const userRoutes = new Elysia()
   .use(simpleLogger())
 
   .post("/signup", handleAsyncRoute(({ body }) => userServices.signUpUser({ body })))
-  .post("/login", handleAsyncRoute(({ body }) => userServices.logInUser({ body })))
+  .post("/login", handleAsyncRoute(({ body, set }) => userServices.logInUser({ body, set })))
   
   .group("/", app => app
     .get("", handleAsyncRoute(() => userServices.getAllUsers()))
+    .post("/logout", handleAsyncRoute(({ set }) => userServices.logOutUser({ set })))
   )
   .group("/:id", app => app
     .use(checkIdMiddleware())

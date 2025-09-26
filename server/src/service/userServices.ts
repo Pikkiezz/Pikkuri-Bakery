@@ -111,6 +111,26 @@ export const logInUser = async ({ body, set }: { body: LoginUserBody, set?: any 
   };
 }
 
+// Logout User
+export const logOutUser = async ({ set }: { set?: any }) => {
+  try {
+    // Clear cookie by setting it to expire
+    if (set) {
+      set.headers = {
+        ...set.headers,
+        'Set-Cookie': 'userToken=; HttpOnly; Secure; SameSite=Strict; Max-Age=0; Path=/'
+      };
+    }
+    
+    return {
+      status: "success",
+      message: "User logged out successfully"
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
 // ------------ Verify Token Services --------
 
 

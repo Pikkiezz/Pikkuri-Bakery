@@ -37,29 +37,27 @@ export interface RefreshTokenRequest {
 export class AuthService {
   private userKey = 'user_data';
 
-  // Get stored token from cookie
+  // Check if user is authenticated (based on user data, not token)
   getToken(): string | null {
-    if (typeof window === 'undefined') return null;
-    const cookies = document.cookie.split(';');
-    const tokenCookie = cookies.find(cookie => cookie.trim().startsWith('userToken='));
-    return tokenCookie ? tokenCookie.split('=')[1] : null;
+    // For HttpOnly cookies, we don't need to read the token
+    // The browser will send it automatically with credentials: 'include'
+    const user = this.getUser();
+    return user ? 'authenticated' : null;
   }
 
-  // Get stored refresh token from cookie
+  // Get stored refresh token (not needed for HttpOnly cookies)
   getRefreshToken(): string | null {
-    if (typeof window === 'undefined') return null;
-    const cookies = document.cookie.split(';');
-    const refreshTokenCookie = cookies.find(cookie => cookie.trim().startsWith('refreshToken='));
-    return refreshTokenCookie ? refreshTokenCookie.split('=')[1] : null;
+    return null; // Not needed for HttpOnly cookies
   }
 
   // Get stored user from localStorage (only user data, not token)
   getUser(): User | null {
     if (typeof window === 'undefined') return null;
     const userStr = localStorage.getItem(this.userKey);
-    if (!userStr || userStr === 'undefined' || userStr === 'null') return null;
+    if (!userStr || userStr === 'undefined' || userStr === 'null' || userStr === '') return null;
     try {
-      return JSON.parse(userStr);
+      const user = JSON.parse(userStr);
+      return user;
     } catch (error) {
       console.error('Error parsing user data:', error);
       return null;
@@ -78,9 +76,7 @@ export class AuthService {
     if (typeof window === 'undefined') return;
     // Clear user data from localStorage
     localStorage.removeItem(this.userKey);
-    // Clear cookies by setting them to expire
-    document.cookie = 'userToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-    document.cookie = 'refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    // Note: HttpOnly cookies are cleared by server on logout
   }
 
   // Check if user is authenticated
@@ -93,7 +89,7 @@ export class AuthService {
     try {
       const response = await apiClient.post<{ status: string; message: string; token: string; data: User }>('/users/login', credentials);
       const authData: AuthResponse = {
-        user: response.data?.data as User,
+        user: response.data as User,
         token: response.data?.token as string,
         refreshToken: response.data?.token as string // Use same token as refresh for now
       };
@@ -130,12 +126,7 @@ export class AuthService {
   // Logout
   async logout(): Promise<void> {
     try {
-      const refreshToken = this.getRefreshToken();
-      if (refreshToken) {
-        // TODO: Implement logout API when backend is ready
-        // await apiClient.post(API_CONFIG.ENDPOINTS.AUTH.LOGOUT, { refreshToken });
-        console.log('Logout (mock implementation)');
-      }
+      await apiClient.post('/users/logout');
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
