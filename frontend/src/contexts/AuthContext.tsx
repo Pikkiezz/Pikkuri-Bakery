@@ -75,9 +75,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setError(null);
       const authData = await authService.register(userData);
       setUser(authData.user);
+      return authData; // Return success data
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Registration failed');
-      throw err; // Re-throw to handle in component
+      const errorMessage = err instanceof Error ? err.message : 'Registration failed';
+      setError(errorMessage);
+      throw new Error(errorMessage); // Re-throw for component handling
     } finally {
       setIsLoading(false);
     }

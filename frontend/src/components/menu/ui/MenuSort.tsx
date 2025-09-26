@@ -7,7 +7,7 @@ const MenuSort = () => {
 
   // Handle sort by change
   const handleSortByChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSortBy(e.target.value as 'name' | 'price' | 'rating');
+    setSortBy(e.target.value as 'name' | 'price' | 'newest');
   };
 
   // Handle sort order change
@@ -28,7 +28,7 @@ const MenuSort = () => {
           >
             <option value="name">Name</option>
             <option value="price">Price</option>
-            <option value="rating">Rating</option>
+            <option value="newest">Newest</option>
           </select>
         </div>
 

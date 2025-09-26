@@ -12,12 +12,13 @@ interface RegisterModalProps {
 const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModalProps) => {
   const { register, isLoading, error, clearError } = useAuth();
   const [formData, setFormData] = useState({
-    name: '',
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
     phone: ''
   });
+
 
   if (!isOpen) return null;
 
@@ -44,14 +45,16 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModalProps)
 
     try {
       await register({
-        name: formData.name,
+        username: formData.username,
         email: formData.email,
         password: formData.password,
         phone: formData.phone
       });
       onClose(); // Close modal after successful registration
+      // Switch to login modal after successful registration
+      onSwitchToLogin();
     } catch (err) {
-      // Error is handled by context
+      // Error is handled by AuthContext and displayed in UI
     }
   };
 
@@ -101,16 +104,16 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModalProps)
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-bold text-stone-700 mb-2 font-fredoka">
-            Full Name
+            Username
           </label>
           <input
             type="text"
-            name="name"
-            value={formData.name}
+            name="username"
+            value={formData.username || ''}
             onChange={handleInputChange}
             required
             className="w-full p-3 border-2 border-stone-300 rounded-xl focus:ring-2 focus:ring-stone-400 focus:border-stone-500 bg-white text-stone-700 font-quicksand"
-            placeholder="Enter your full name"
+            placeholder="Enter your username"
           />
         </div>
 
@@ -121,7 +124,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModalProps)
           <input
             type="email"
             name="email"
-            value={formData.email}
+            value={formData.email || ''}
             onChange={handleInputChange}
             required
             className="w-full p-3 border-2 border-stone-300 rounded-xl focus:ring-2 focus:ring-stone-400 focus:border-stone-500 bg-white text-stone-700 font-quicksand"
@@ -136,11 +139,11 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModalProps)
           <input
             type="tel"
             name="phone"
-            value={formData.phone}
+            value={formData.phone || ''}
             onChange={handleInputChange}
             required
             className="w-full p-3 border-2 border-stone-300 rounded-xl focus:ring-2 focus:ring-stone-400 focus:border-stone-500 bg-white text-stone-700 font-quicksand"
-            placeholder="Enter your phone number"
+            placeholder="0812345678"
           />
         </div>
 
@@ -151,7 +154,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModalProps)
           <input
             type="password"
             name="password"
-            value={formData.password}
+            value={formData.password || ''}
             onChange={handleInputChange}
             required
             minLength={6}
@@ -167,7 +170,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModalProps)
           <input
             type="password"
             name="confirmPassword"
-            value={formData.confirmPassword}
+            value={formData.confirmPassword || ''}
             onChange={handleInputChange}
             required
             className="w-full p-3 border-2 border-stone-300 rounded-xl focus:ring-2 focus:ring-stone-400 focus:border-stone-500 bg-white text-stone-700 font-quicksand"
@@ -175,19 +178,6 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModalProps)
           />
         </div>
 
-        <div className="flex items-center">
-          <input type="checkbox" required className="mr-2" />
-          <span className="text-sm text-stone-600 font-quicksand">
-            I agree to the{' '}
-            <button type="button" className="text-stone-800 font-bold hover:text-amber-600">
-              Terms of Service
-            </button>
-            {' '}and{' '}
-            <button type="button" className="text-stone-800 font-bold hover:text-amber-600">
-              Privacy Policy
-            </button>
-          </span>
-        </div>
 
         <button
           type="submit"

@@ -107,19 +107,6 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }: LoginModalProps) =>
           />
         </div>
 
-        <div className="flex items-center justify-between">
-          <label className="flex items-center">
-            <input type="checkbox" className="mr-2" />
-            <span className="text-sm text-stone-600 font-quicksand">Remember me</span>
-          </label>
-          <button
-            type="button"
-            className="text-sm text-stone-600 hover:text-stone-800 font-quicksand"
-          >
-            Forgot password?
-          </button>
-        </div>
-
         <button
           type="submit"
           disabled={isLoading}

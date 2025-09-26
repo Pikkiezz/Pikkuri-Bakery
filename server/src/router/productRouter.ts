@@ -47,7 +47,7 @@ export const productRoutes = new Elysia()
     
     // Protected routes with ID validation
     .group("/:id", app => app
-      .use(verifyUserTokenMiddleware())
+      // .use(verifyUserTokenMiddleware())
       .use(checkIdMiddleware())
       .get("", handleAsyncRoute(({ params }) => productService.getProductById({ params })))
       .patch("", handleAsyncRoute(({ body, params }) => productService.updateProductById({ params, body })))

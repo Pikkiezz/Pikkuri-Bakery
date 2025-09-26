@@ -32,7 +32,7 @@ const Header = () => {
     e.preventDefault();
     // Search is already handled by FilterContext
     // This function can be used for additional search logic if needed
-    console.log('Search submitted:', filters.searchQuery);
+    console.log('Search submitted:', filters.searchTerm);
   };
 
   // Handle clear search
@@ -97,7 +97,7 @@ const Header = () => {
   }, [isProfileOpen]);
 
   return (
-    <header className="relative bg-gradient-to-r from-stone-100 via-amber-50 to-stone-200 h-20 shadow-lg border-b border-stone-200">
+    <header className="relative bg-gradient-to-r from-stone-100 via-amber-50 to-stone-200 h-20 shadow-lg border-b border-stone-200 z-50">
       {/* Floating decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-2 left-10 w-3 h-3 bg-stone-300 rounded-full animate-bounce"></div>
@@ -175,7 +175,7 @@ const Header = () => {
                 <input
                   type="text"
                   placeholder="Search bakery items..."
-                  value={filters.searchQuery}
+                  value={filters.searchTerm}
                   onChange={handleSearchChange}
                   className="w-68 pl-10 pr-4 py-2 border-2 border-stone-300 rounded-full focus:ring-2 focus:ring-stone-400 focus:border-stone-500 bg-stone-100/50 backdrop-blur-sm text-stone-700 placeholder-stone-500"
                 />
@@ -184,7 +184,7 @@ const Header = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 </div>
-                {filters.searchQuery && (
+                {filters.searchTerm && (
                   <button
                     type="button"
                     onClick={handleClearSearch}

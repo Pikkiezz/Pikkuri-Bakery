@@ -15,7 +15,7 @@ interface MenuItemCardProps {
 
 const MenuItemCard = ({ item, quantity, onQuantityChange }: MenuItemCardProps) => {
   const { addToCart } = useCart();
-  console.log('THIS IS THE ITEM', item);
+  
   return (
     <div className="group">
       <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-105 transform hover:-translate-y-2 border border-stone-200/50">

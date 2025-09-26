@@ -7,7 +7,10 @@ import type { CreateCategoryBody, CategoryResponse } from "../types/types.js";
 export const getCategories = async () => {
   try {
     let response = await db.category.findMany();
-    return response;
+    return {
+      status: "success",
+      data: response
+    };
   } catch (error) {
     throw error;
   }

@@ -37,7 +37,7 @@ export const API_CONFIG = {
     // Auth endpoints
     AUTH: {
       LOGIN: '/auth/login',
-      REGISTER: '/auth/register',
+      REGISTER: '/auth/signup',
       LOGOUT: '/auth/logout',
       REFRESH: '/auth/refresh',
     },
@@ -75,7 +75,17 @@ export class ApiClient {
       const response = await fetch(url, config);
       
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        // Try to get server error message
+        let errorMessage = `HTTP error! status: ${response.status}`;
+        try {
+          const errorData = await response.json();
+          if (errorData.message) {
+            errorMessage = errorData.message;
+          }
+        } catch (jsonError) {
+          // If can't parse JSON, use default message
+        }
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();

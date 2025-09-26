@@ -17,7 +17,7 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
-  name: string;
+  username: string;
   email: string;
   password: string;
   phone: string;
@@ -81,24 +81,39 @@ export class AuthService {
   // Login
   async login(credentials: LoginRequest): Promise<AuthResponse> {
     try {
-      const response = await apiClient.post<AuthResponse>('/auth/login', credentials);
-      this.storeAuthData(response);
-      return response;
-    } catch (error) {
+      const response = await apiClient.post<{ status: string; message: string; token: string; data: User }>('/users/login', credentials);
+      const authData: AuthResponse = {
+        user: response.data?.data as User,
+        token: response.data?.token as string,
+        refreshToken: response.data?.token as string // Use same token as refresh for now
+      };
+      this.storeAuthData(authData);
+      return authData;
+    } catch (error: any) {
       console.error('Login failed:', error);
-      throw new Error('Login failed. Please check your credentials.');
+      // Extract server error message if available
+      const serverMessage = error?.response?.data?.message || error?.message;
+      throw new Error(serverMessage || 'Login failed. Please check your credentials.');
     }
   }
 
   // Register
   async register(userData: RegisterRequest): Promise<AuthResponse> {
     try {
-      const response = await apiClient.post<AuthResponse>('/auth/register', userData);
-      this.storeAuthData(response);
-      return response;
-    } catch (error) {
+      const response = await apiClient.post<{ status: string; message: string; data: User }>('/users/signup', userData);
+      // After successful signup, user needs to login to get token
+      const authData: AuthResponse = {
+        user: response.data?.data as User,
+        token: '', // No token on signup
+        refreshToken: ''
+      };
+      // Don't store auth data on signup, user needs to login
+      return authData;
+    } catch (error: any) {
       console.error('Registration failed:', error);
-      throw new Error('Registration failed. Please try again.');
+      // Extract server error message if available
+      const serverMessage = error?.response?.data?.message || error?.message;
+      throw new Error(serverMessage || 'Registration failed. Please try again.');
     }
   }
 
@@ -146,8 +161,8 @@ export class AuthService {
         throw new Error('No token available');
       }
 
-      const response = await apiClient.get<User>('/auth/verify');
-      return response;
+      const response = await apiClient.get<{ status: string; message: string; data: User }>('/users/verify');
+      return response.data?.data as User;
     } catch (error) {
       console.error('Token verification failed:', error);
       this.clearAuthData();
@@ -155,29 +170,6 @@ export class AuthService {
     }
   }
 
-  // Forgot password
-  async forgotPassword(email: string): Promise<void> {
-    try {
-      // TODO: Implement forgot password API when backend is ready
-      // await apiClient.post(API_CONFIG.ENDPOINTS.AUTH.FORGOT_PASSWORD, { email });
-      console.log('Forgot password (mock implementation)');
-    } catch (error) {
-      console.error('Forgot password failed:', error);
-      throw new Error('Failed to send reset email. Please try again.');
-    }
-  }
-
-  // Reset password
-  async resetPassword(token: string, newPassword: string): Promise<void> {
-    try {
-      // TODO: Implement reset password API when backend is ready
-      // await apiClient.post(API_CONFIG.ENDPOINTS.AUTH.RESET_PASSWORD, { token, newPassword });
-      console.log('Reset password (mock implementation)');
-    } catch (error) {
-      console.error('Reset password failed:', error);
-      throw new Error('Failed to reset password. Please try again.');
-    }
-  }
 }
 
 export const authService = new AuthService();

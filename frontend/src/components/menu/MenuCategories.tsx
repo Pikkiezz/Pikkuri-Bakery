@@ -16,12 +16,12 @@ const MenuCategories = () => {
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
 
   // Transform categories for filter
-  console.log('Categories from useCategory:', categories);
+
   const categoriesForFilter = categories?.map(category => ({
     id: category.id,
     name: category.name
   })) || [];
-  console.log('Categories for filter:', categoriesForFilter);
+
 
   // Get all items from all categories
   const allItems = productsData?.response || [];

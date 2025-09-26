@@ -29,11 +29,10 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      console.log('Fetching categories from:', API_CONFIG.ENDPOINTS.PRODUCTS.CATEGORIES);
+    
       const response = await apiClient.get<Category[]>(API_CONFIG.ENDPOINTS.PRODUCTS.CATEGORIES);
       console.log('Categories response:', response);
       console.log('Categories data:', response.data);
-      // API response is directly an array, not wrapped in { data: [...] }
       setCategories(response.data || []);
     } catch (err: any) {
       console.error('Error fetching categories:', err);
