@@ -73,7 +73,7 @@ const ALLOWED_ORIGINS = [
 
 const app = new Elysia()
   .onRequest(({ request, set }) => {
-    console.log(`Incoming request: ${request.method} ${request.url}`);
+    console.log(`🌐 Incoming request: ${request.method} ${request.url}`);
     
     // Manual CORS headers
     set.headers = {
@@ -97,7 +97,7 @@ const app = new Elysia()
   .mount("/api/v1/products", productRoutes)
   .mount("/api/v1/users", userRoutes)
   .mount("/api/v1/admins", adminRoutes)
-  .mount("/api/v1/cart", cartRoutes)
+  .mount("/api/v1/carts", cartRoutes)
   .mount("/api/v1/reviews", reviewRoutes)
   .mount("/api/v1/orders", orderRoutes)
   .mount("/api/v1/categories", categoryRoutes)

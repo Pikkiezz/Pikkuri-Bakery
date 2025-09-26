@@ -1,6 +1,5 @@
-import { apiClient, API_CONFIG } from '@/config/api';
+import { apiClient } from '@/config/api';
 
-// Types (should match your Prisma models)
 export interface CartItem {
   id: number;
   productId: number;
@@ -9,21 +8,17 @@ export interface CartItem {
     id: number;
     name: string;
     price: number;
-    image?: string;
-    emoji?: string;
+    imageUrl: string | null;
+    stock: number;
   };
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface Cart {
   id: number;
-  userId?: number;
+  userId: number;
   items: CartItem[];
-  totalItems: number;
-  totalPrice: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface AddToCartRequest {
@@ -32,67 +27,39 @@ export interface AddToCartRequest {
 }
 
 export interface UpdateCartItemRequest {
-  itemId: number;
   quantity: number;
 }
 
-// Cart Service
-export class CartService {
-  // Get current cart
+class CartService {
+  // Get user's cart
   async getCart(): Promise<Cart> {
-    try {
-      const response = await apiClient.get<Cart>(API_CONFIG.ENDPOINTS.CART.GET);
-      return response;
-    } catch (error) {
-      console.error('Failed to fetch cart:', error);
-      throw new Error('Failed to fetch cart');
-    }
+    const response = await apiClient.get<{ status: string; data: Cart }>('/carts');
+    return response.data;
   }
 
   // Add item to cart
   async addToCart(data: AddToCartRequest): Promise<Cart> {
-    try {
-      const response = await apiClient.post<Cart>(API_CONFIG.ENDPOINTS.CART.ADD, data);
-      return response;
-    } catch (error) {
-      console.error('Failed to add item to cart:', error);
-      throw new Error('Failed to add item to cart');
-    }
+    const response = await apiClient.post<{ status: string; data: Cart }>('/carts', data);
+    return response.data;
   }
 
   // Update cart item quantity
-  async updateCartItem(data: UpdateCartItemRequest): Promise<Cart> {
-    try {
-      const response = await apiClient.put<Cart>(API_CONFIG.ENDPOINTS.CART.UPDATE, data);
-      return response;
-    } catch (error) {
-      console.error('Failed to update cart item:', error);
-      throw new Error('Failed to update cart item');
-    }
+  async updateCartItem(itemId: number, data: UpdateCartItemRequest): Promise<Cart> {
+    const response = await apiClient.patch<{ status: string; data: Cart }>(`/carts/${itemId}`, data);
+    return response.data;
   }
 
   // Remove item from cart
   async removeFromCart(itemId: number): Promise<Cart> {
-    try {
-      const response = await apiClient.delete<Cart>(`${API_CONFIG.ENDPOINTS.CART.REMOVE}/${itemId}`);
-      return response;
-    } catch (error) {
-      console.error('Failed to remove item from cart:', error);
-      throw new Error('Failed to remove item from cart');
-    }
+    const response = await apiClient.delete<{ status: string; data: Cart }>(`/carts/${itemId}`);
+    return response.data;
   }
 
   // Clear entire cart
   async clearCart(): Promise<Cart> {
-    try {
-      const response = await apiClient.delete<Cart>(API_CONFIG.ENDPOINTS.CART.CLEAR);
-      return response;
-    } catch (error) {
-      console.error('Failed to clear cart:', error);
-      throw new Error('Failed to clear cart');
-    }
+    const response = await apiClient.delete<{ status: string; data: Cart }>('/carts');
+    return response.data;
   }
 }
 
-// Create service instance
 export const cartService = new CartService();

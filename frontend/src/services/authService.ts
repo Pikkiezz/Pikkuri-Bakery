@@ -2,11 +2,11 @@ import { apiClient, API_CONFIG } from '@/config/api';
 
 export interface User {
   id: number;
-  name: string;
+  username: string;
   email: string;
   phone: string;
-  avatar?: string;
-  role: 'user' | 'admin';
+  address?: string;
+  password: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -81,15 +81,20 @@ export class AuthService {
 
   // Check if user is authenticated
   isAuthenticated(): boolean {
-    return !!this.getToken();
+    // For HttpOnly cookies, we can't check token directly
+    // So we rely on user data in localStorage
+    // If user data exists, assume they're authenticated
+    // The server will handle token validation
+    return !!this.getUser();
   }
 
   // Login
   async login(credentials: LoginRequest): Promise<AuthResponse> {
     try {
       const response = await apiClient.post<{ status: string; message: string; token: string; data: User }>('/users/login', credentials);
+      console.log('AuthService - login response:', response.data);
       const authData: AuthResponse = {
-        user: response.data as User,
+        user: response.data as unknown as User,
         token: response.data?.token as string,
         refreshToken: response.data?.token as string // Use same token as refresh for now
       };
@@ -126,10 +131,12 @@ export class AuthService {
   // Logout
   async logout(): Promise<void> {
     try {
+      // Call logout API to clear server-side session
       await apiClient.post('/users/logout');
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
+      // Clear local auth data (cart will be cleared by CartContext)
       this.clearAuthData();
     }
   }
@@ -154,22 +161,6 @@ export class AuthService {
     }
   }
 
-  // Verify token
-  async verifyToken(): Promise<User> {
-    try {
-      const token = this.getToken();
-      if (!token) {
-        throw new Error('No token available');
-      }
-
-      const response = await apiClient.get<{ status: string; message: string; data: User }>('/users/verify');
-      return response.data?.data as User;
-    } catch (error) {
-      console.error('Token verification failed:', error);
-      this.clearAuthData();
-      throw new Error('Invalid token. Please login again.');
-    }
-  }
 
 }
 

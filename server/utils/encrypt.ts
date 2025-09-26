@@ -16,7 +16,7 @@ export const hashPassword = async (paintextpassword: string, saltRounds: number 
 
 export const generateJWT = async (data: any) => {
     const secret = process.env.JWT_SECRET || 'Pleasedontchangemypassword@';
-    const token = jwt.sign(data, secret, { expiresIn: 60 * 60 });
+    const token = jwt.sign(data, secret, { expiresIn: 24 * 60 * 60 }); // 24 hours
     return token;
 }
 

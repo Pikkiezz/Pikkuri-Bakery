@@ -34,17 +34,23 @@ export const checkIdMiddleware = () => (app: Elysia) => app
 export const verifyUserTokenMiddleware = () => (app: Elysia) => app
   .onBeforeHandle(async ({ headers, set, cookie, store }: { headers: Headers, set: any, cookie: any, store?: Store }) => {
     try {
+      console.log('🔐 verifyUserTokenMiddleware - cookie:', cookie);
+      console.log('🔐 verifyUserTokenMiddleware - headers.authorization:', headers.authorization);
+      
       let tokenData;
       
       // check token from cookie first
       if (cookie?.userToken) {
+        console.log('🔐 Using cookie token:', cookie.userToken);
         const token = cookie.userToken;
         const mockHeaders = { authorization: `Bearer ${token}` };
         tokenData = await userServices.verifyTokenUser({ headers: mockHeaders });
       } else if (headers.authorization) {
+        console.log('🔐 Using header token:', headers.authorization);
         // check header if no cookie
         tokenData = await userServices.verifyTokenUser({ headers });
       } else {
+        console.log('🔐 No token provided');
         throw new ValidationError("No token provided");
       }
       

@@ -88,7 +88,11 @@ const MenuItemCard = ({ item, quantity, onQuantityChange }: MenuItemCardProps) =
               if (onQuantityChange) {
                 onQuantityChange(item.id, -quantity);
               }
-              addToCart(item.id, quantity);
+              addToCart(item.id, quantity, {
+                name: item.name,
+                price: item.price,
+                image: item.imageUrl || ''
+              });
             }}
           >
             {onQuantityChange 

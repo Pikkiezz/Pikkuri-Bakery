@@ -9,7 +9,9 @@ import { processPayment } from "./paymentService.js";
 // Get user's cart
 export const getCart = async ({ store }: { store?: Store }) => {
   try {
+    console.log('🛒 getCart - store:', store);
     const userId = store ?.userId;
+    console.log('🛒 getCart - userId:', userId);
     if (!userId) {
       throw new ValidationError("User not authenticated");
     }

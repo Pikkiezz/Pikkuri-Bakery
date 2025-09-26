@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { mockCartService, MockCartItem, AddToCartRequest } from '@/services/mockCartService';
+import { cartService, CartItem as ApiCartItem } from '@/services/cartService';
 
 // Types
 interface CartItem {
@@ -21,7 +21,7 @@ interface CartState {
 
 interface CartContextType {
   state: CartState;
-  addToCart: (productId: number, quantity?: number) => Promise<void>;
+  addToCart: (productId: number, quantity?: number, productData?: { name: string; price: number; image?: string }) => Promise<void>;
   removeFromCart: (id: number) => Promise<void>;
   updateQuantity: (id: number, quantity: number) => Promise<void>;
   clearCart: () => Promise<void>;
@@ -30,14 +30,14 @@ interface CartContextType {
   refreshCart: () => Promise<void>;
 }
 
-// Helper function to convert mock cart item to local cart item
-const convertMockCartItem = (mockItem: MockCartItem): CartItem => ({
-  id: mockItem.id,
-  name: mockItem.name,
-  price: mockItem.price,
-  quantity: mockItem.quantity,
-  image: mockItem.image,
-  emoji: mockItem.emoji,
+// Helper function to convert API cart item to local cart item
+const convertApiCartItem = (apiItem: ApiCartItem): CartItem => ({
+  id: apiItem.id,
+  name: apiItem.product.name,
+  price: apiItem.product.price,
+  quantity: apiItem.quantity,
+  image: apiItem.product.imageUrl || undefined,
+  emoji: '🍽️', // Default emoji
 });
 
 // Calculate totals
@@ -60,46 +60,62 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Load cart from API on mount
+  // Load cart from API on mount (only when component is used)
   useEffect(() => {
+    console.log('🔄 CartContext useEffect - calling refreshCart');
     refreshCart();
   }, []);
 
-  // Refresh cart from mock service
+
+  // Refresh cart from API
   const refreshCart = async () => {
     try {
+      console.log('🔄 refreshCart - starting...');
       setIsLoading(true);
       setError(null);
-      const cart = await mockCartService.getCart();
-      const items = cart.items.map(convertMockCartItem);
+      console.log('🔄 refreshCart - calling cartService.getCart()');
+      const cart = await cartService.getCart();
+      console.log('🔄 refreshCart - Cart from API:', cart);
+      const items = cart.items.map(convertApiCartItem);
+      console.log('Converted items:', items);
       const { total, itemCount } = calculateTotals(items);
+      console.log('Calculated totals:', { total, itemCount });
       
       setState({ items, total, itemCount });
+      console.log('Cart state updated');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load cart');
       console.error('Failed to refresh cart:', err);
+      
+      // Check if it's an authentication error
+      if (err instanceof Error && err.message.includes('Invalid token')) {
+        console.log('🔄 Token expired, clearing auth data');
+        // Clear auth data (don't redirect to avoid infinite loop)
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('user_data');
+        }
+      }
+      
+      setError(err instanceof Error ? err.message : 'Failed to load cart');
     } finally {
       setIsLoading(false);
     }
   };
 
   // Add item to cart
-  const addToCart = async (productId: number, quantity: number = 1) => {
+  const addToCart = async (productId: number, quantity: number = 1, productData?: { name: string; price: number; image?: string }) => {
     try {
+      console.log('Adding to cart:', { productId, quantity, productData });
       setIsLoading(true);
       setError(null);
       
-      const request: AddToCartRequest = {
+      const request = {
         productId: productId,
-        quantity: quantity,
-        name: '', // Will be filled by backend
-        price: 0, // Will be filled by backend
-        image: '', // Will be filled by backend
-        emoji: '🍽️', // Default emoji
-        category: 'General' // Default category
+        quantity: quantity
       };
       
-      await mockCartService.addToCart(request);
+      console.log('Request:', request);
+      await cartService.addToCart(request);
+      console.log('Added to cart successfully');
       await refreshCart(); // Refresh cart after adding
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to add item to cart');
@@ -115,7 +131,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       setIsLoading(true);
       setError(null);
       
-      await mockCartService.removeFromCart(id);
+      await cartService.removeFromCart(id);
       await refreshCart(); // Refresh cart after removing
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to remove item from cart');
@@ -132,9 +148,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       setError(null);
       
       if (quantity <= 0) {
-        await mockCartService.removeFromCart(id);
+        await cartService.removeFromCart(id);
       } else {
-        await mockCartService.updateCartItem({ itemId: id, quantity });
+        await cartService.updateCartItem(id, { quantity });
       }
       
       await refreshCart(); // Refresh cart after updating
@@ -152,7 +168,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       setIsLoading(true);
       setError(null);
       
-      await mockCartService.clearCart();
+      await cartService.clearCart();
       await refreshCart(); // Refresh cart after clearing
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to clear cart');

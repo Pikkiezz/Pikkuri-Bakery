@@ -18,7 +18,7 @@ const Header = () => {
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const pathname = usePathname();
   const { filters, setSearchQuery } = useFilter();
-  const { state: cartState } = useCart();
+  const { state } = useCart();
   const { user, isAuthenticated, logout } = useAuth();
   const profileRef = useRef<HTMLDivElement>(null);
 
@@ -204,7 +204,7 @@ const Header = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 11-4 0v-6m4 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01" />
               </svg>
               <span className="absolute -top-1 -right-1 bg-gradient-to-r from-stone-600 to-amber-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold shadow-lg animate-pulse">
-                {cartState.itemCount}
+                {state.itemCount}
               </span>
             </Link>
 
@@ -226,7 +226,7 @@ const Header = () => {
                     // Authenticated user menu
                     <>
                       <div className="px-4 py-2 border-b border-stone-200">
-                        <p className="text-sm font-bold text-stone-800 font-fredoka">{user?.name}</p>
+                        <p className="text-sm font-bold text-stone-800 font-fredoka">{user?.username}</p>
                         <p className="text-xs text-stone-600 font-quicksand">{user?.email}</p>
                       </div>
                       <button

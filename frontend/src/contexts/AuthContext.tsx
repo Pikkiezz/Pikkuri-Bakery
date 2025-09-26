@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { authService, User, LoginRequest, RegisterRequest } from '@/services/authService';
+import { authService, User, LoginRequest, RegisterRequest, AuthResponse } from '@/services/authService';
 
 interface AuthContextType {
   user: User | null;
@@ -9,7 +9,7 @@ interface AuthContextType {
   isLoading: boolean;
   error: string | null;
   login: (credentials: LoginRequest) => Promise<void>;
-  register: (userData: RegisterRequest) => Promise<void>;
+  register: (userData: RegisterRequest) => Promise<AuthResponse>;
   logout: () => Promise<void>;
   clearError: () => void;
 }
@@ -37,10 +37,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const storedUser = authService.getUser();
         if (storedUser) {
           setUser(storedUser);
-        } else {
-          // Verify token with server
-          const verifiedUser = await authService.verifyToken();
-          setUser(verifiedUser);
         }
       }
     } catch (err) {
@@ -92,6 +88,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setError(null);
       await authService.logout();
       setUser(null);
+      
+      // Redirect to home if currently on protected page
+      if (typeof window !== 'undefined') {
+        const currentPath = window.location.pathname;
+        if (currentPath === '/cart' || currentPath === '/orders' || currentPath.startsWith('/profile')) {
+          window.location.href = '/';
+        }
+      }
     } catch (err) {
       console.error('Logout error:', err);
       // Clear local state even if server logout fails
