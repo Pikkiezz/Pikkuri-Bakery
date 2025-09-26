@@ -13,6 +13,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }: LoginModalProps) =>
   const { login, isLoading, error, clearError } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
+    username: '',
     password: ''
   });
 
@@ -21,10 +22,28 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }: LoginModalProps) =>
   // Handle form input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    
+    if (name === 'email') {
+      // Clear username when typing in email field
+      setFormData(prev => ({
+        ...prev,
+        email: value,
+        username: ''
+      }));
+    } else if (name === 'username') {
+      // Clear email when typing in username field
+      setFormData(prev => ({
+        ...prev,
+        username: value,
+        email: ''
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
+    
     // Clear error when user starts typing
     if (error) clearError();
   };
@@ -33,10 +52,20 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }: LoginModalProps) =>
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login(formData);
+      // Determine if input is email or username
+      const input = formData.email || formData.username;
+      const isEmail = input.includes('@');
+      
+      const loginData = {
+        email: isEmail ? input : undefined,
+        username: !isEmail ? input : undefined,
+        password: formData.password
+      };
+      
+      await login(loginData);
       onClose(); // Close modal after successful login
     } catch (err) {
-      // Error is handled by context
+      // Error is handled by AuthContext and displayed in UI
     }
   };
 
@@ -79,16 +108,16 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }: LoginModalProps) =>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-bold text-stone-700 mb-2 font-fredoka">
-            Email
+            Email or Username
           </label>
           <input
-            type="email"
+            type="text"
             name="email"
-            value={formData.email}
+            value={formData.email || ''}
             onChange={handleInputChange}
             required
             className="w-full p-3 border-2 border-stone-300 rounded-xl focus:ring-2 focus:ring-stone-400 focus:border-stone-500 bg-white text-stone-700 font-quicksand"
-            placeholder="Enter your email"
+            placeholder="Enter your email or username"
           />
         </div>
 
@@ -99,7 +128,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }: LoginModalProps) =>
           <input
             type="password"
             name="password"
-            value={formData.password}
+            value={formData.password || ''}
             onChange={handleInputChange}
             required
             className="w-full p-3 border-2 border-stone-300 rounded-xl focus:ring-2 focus:ring-stone-400 focus:border-stone-500 bg-white text-stone-700 font-quicksand"

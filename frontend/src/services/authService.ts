@@ -12,7 +12,8 @@ export interface User {
 }
 
 export interface LoginRequest {
-  email: string;
+  email: string | undefined;
+  username: string | undefined;
   password: string;
 }
 
@@ -34,43 +35,52 @@ export interface RefreshTokenRequest {
 }
 
 export class AuthService {
-  private tokenKey = 'auth_token';
-  private refreshTokenKey = 'refresh_token';
   private userKey = 'user_data';
 
-  // Get stored token
+  // Get stored token from cookie
   getToken(): string | null {
     if (typeof window === 'undefined') return null;
-    return localStorage.getItem(this.tokenKey);
+    const cookies = document.cookie.split(';');
+    const tokenCookie = cookies.find(cookie => cookie.trim().startsWith('userToken='));
+    return tokenCookie ? tokenCookie.split('=')[1] : null;
   }
 
-  // Get stored refresh token
+  // Get stored refresh token from cookie
   getRefreshToken(): string | null {
     if (typeof window === 'undefined') return null;
-    return localStorage.getItem(this.refreshTokenKey);
+    const cookies = document.cookie.split(';');
+    const refreshTokenCookie = cookies.find(cookie => cookie.trim().startsWith('refreshToken='));
+    return refreshTokenCookie ? refreshTokenCookie.split('=')[1] : null;
   }
 
-  // Get stored user
+  // Get stored user from localStorage (only user data, not token)
   getUser(): User | null {
     if (typeof window === 'undefined') return null;
     const userStr = localStorage.getItem(this.userKey);
-    return userStr ? JSON.parse(userStr) : null;
+    if (!userStr || userStr === 'undefined' || userStr === 'null') return null;
+    try {
+      return JSON.parse(userStr);
+    } catch (error) {
+      console.error('Error parsing user data:', error);
+      return null;
+    }
   }
 
-  // Store auth data
+  // Store auth data (token is stored in cookie by server)
   private storeAuthData(authData: AuthResponse): void {
     if (typeof window === 'undefined') return;
-    localStorage.setItem(this.tokenKey, authData.token);
-    localStorage.setItem(this.refreshTokenKey, authData.refreshToken);
+    // Only store user data in localStorage, token is in cookie
     localStorage.setItem(this.userKey, JSON.stringify(authData.user));
   }
 
   // Clear auth data
   clearAuthData(): void {
     if (typeof window === 'undefined') return;
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem(this.refreshTokenKey);
+    // Clear user data from localStorage
     localStorage.removeItem(this.userKey);
+    // Clear cookies by setting them to expire
+    document.cookie = 'userToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
   }
 
   // Check if user is authenticated
