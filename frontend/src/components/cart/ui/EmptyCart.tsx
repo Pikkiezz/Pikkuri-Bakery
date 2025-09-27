@@ -19,8 +19,8 @@ const EmptyCart = () => {
       </h1>
       
       <p className="text-xl text-stone-700 mb-8 font-quicksand max-w-2xl mx-auto">
-        Looks like you haven't added any delicious bakery items to your cart yet. 
-        Let's fix that! 🥐☕
+        Looks like you haven&apos;t added any delicious bakery items to your cart yet. 
+        Let&apos;s fix that! 🥐☕
       </p>
     </>
   );
@@ -47,52 +47,6 @@ const EmptyCart = () => {
     </div>
   );
 
-  // Render popular items
-  const renderPopularItems = () => {
-    const popularItems = [
-      {
-        emoji: '🥐',
-        name: 'Croissants',
-        description: 'Flaky, buttery layers baked to perfection',
-        price: 'From $4.50'
-      },
-      {
-        emoji: '☕',
-        name: 'Coffee',
-        description: 'Rich, aromatic coffee to start your day',
-        price: 'From $2.50'
-      },
-      {
-        emoji: '🍰',
-        name: 'Cakes',
-        description: 'Delicious cakes and desserts for every occasion',
-        price: 'From $4.00'
-      }
-    ];
-
-    return (
-      <div className="mt-16">
-        <h2 className="text-2xl font-bold text-stone-700 mb-6 font-fredoka">
-          Popular Items
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          {popularItems.map((item, index) => (
-            <div 
-              key={index}
-              className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
-            >
-              <div className="text-4xl mb-4">{item.emoji}</div>
-              <h3 className="text-lg font-bold text-stone-700 mb-2 font-poppins">{item.name}</h3>
-              <p className="text-stone-600 text-sm font-quicksand mb-4">
-                {item.description}
-              </p>
-              <div className="text-xl font-bold text-stone-700">{item.price}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div className="py-20">
@@ -101,7 +55,6 @@ const EmptyCart = () => {
           {renderEmptyCartIcon()}
           {renderEmptyCartMessage()}
           {renderActionButtons()}
-          {renderPopularItems()}
         </div>
       </div>
     </div>

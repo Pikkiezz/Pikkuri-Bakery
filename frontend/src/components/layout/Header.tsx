@@ -210,7 +210,7 @@ const Header = () => {
                     // Authenticated user menu
                     <>
                       <div className="px-4 py-2 border-b border-stone-200">
-                        <p className="text-sm font-bold text-stone-800 font-fredoka">{user?.username}</p>
+                        <p className="text-sm text-stone-800 font-fredoka">{user?.username}</p>
                         <p className="text-xs text-stone-600 font-quicksand">{user?.email}</p>
                       </div>
                       <Link

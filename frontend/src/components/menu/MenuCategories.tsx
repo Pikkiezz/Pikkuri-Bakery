@@ -6,7 +6,6 @@ import { MenuItemCard, CategoryFilter, MenuSort } from './ui';
 import { useProduct } from '@/contexts/ProductContext';
 import { useCategory } from '@/contexts/CategoryContext';
 
-import type { ProductResponse } from '@/types';
 
 
 const MenuCategories = () => {
@@ -75,7 +74,7 @@ const MenuCategories = () => {
   // Render all items
   const renderAllItems = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {filteredAndSortedItems.map((item, index) => (
+      {filteredAndSortedItems.map((item) => (
         <MenuItemCard
           key={item.id}
           item={item}

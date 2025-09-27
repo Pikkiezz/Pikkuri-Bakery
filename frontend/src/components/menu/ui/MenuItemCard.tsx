@@ -1,9 +1,7 @@
 'use client';
 
-
 import { useCart } from '@/contexts/CartContext';
-
-
+import Image from 'next/image';
 
 import type { ProductResponse } from '@/types';
 
@@ -23,9 +21,11 @@ const MenuItemCard = ({ item, quantity, onQuantityChange }: MenuItemCardProps) =
         <div className="relative mb-6">
           <div className="w-full h-48 rounded-xl overflow-hidden shadow-lg">
             {item.imageUrl ? (
-              <img 
+              <Image 
                 src={item.imageUrl} 
                 alt={item.name}
+                width={400}
+                height={192}
                 className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
               />
             ) : (

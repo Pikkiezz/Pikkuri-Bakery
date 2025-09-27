@@ -1,6 +1,7 @@
 'use client';
 
 import { useCart } from '@/contexts/CartContext';
+import Image from 'next/image';
 
 
 interface Product {
@@ -39,9 +40,11 @@ export const ProductCard = ({ product, quantity, onQuantityChange }: ProductCard
           <div className="relative mb-6">
             {product.image ? (
               <div className="w-32 h-32 mx-auto rounded-full overflow-hidden shadow-xl group-hover:scale-110 transition-transform duration-300">
-                <img 
+                <Image 
                   src={product.image} 
                   alt={product.name}
+                  width={128}
+                  height={128}
                   className="w-full h-full object-cover"
                 />
               </div>
