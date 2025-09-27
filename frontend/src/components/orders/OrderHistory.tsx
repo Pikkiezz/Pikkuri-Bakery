@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { OrderCard } from './ui';
 import { orderService, Order } from '@/services/orderService';
 
 
-const OrderHistory = () => {
+const OrderHistoryContent = () => {
   const searchParams = useSearchParams();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -103,6 +103,23 @@ const OrderHistory = () => {
         {renderOrdersList()}
       </div>
     </div>
+  );
+};
+
+const OrderHistory = () => {
+  return (
+    <Suspense fallback={
+      <div className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="text-6xl mb-4">⏳</div>
+            <h3 className="text-xl font-bold text-stone-700 mb-2 font-fredoka">Loading orders...</h3>
+          </div>
+        </div>
+      </div>
+    }>
+      <OrderHistoryContent />
+    </Suspense>
   );
 };
 

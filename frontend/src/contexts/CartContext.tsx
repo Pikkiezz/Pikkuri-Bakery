@@ -70,6 +70,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       setIsLoading(true);
       setError(null);
       const cart = await cartService.getCart();
+      
+      if (!cart || !cart.items) {
+        setState({ items: [], total: 0, itemCount: 0 });
+        return;
+      }
+      
       const items = cart.items.map(convertApiCartItem);
       const { total, itemCount } = calculateTotals(items);
       

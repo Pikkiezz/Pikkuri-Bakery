@@ -103,11 +103,7 @@ export const ProductCard = ({ product, quantity, onQuantityChange }: ProductCard
             disabled={quantity === 0}
             onClick={() => {
               onQuantityChange(product.id, -quantity);
-              addToCart(product.id, quantity, {
-                name: product.name,
-                price: product.price,
-                image: product.image
-              });
+              addToCart(product.id, quantity);
             }}
           >
             🛒 Add to Cart - ${(product.price * quantity).toFixed(2)}

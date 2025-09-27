@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useProduct } from './ProductContext';
 import { useCategory } from './CategoryContext';
@@ -44,6 +44,18 @@ const FilterContext = createContext<FilterContextType | undefined>(undefined);
 
 // Provider component
 export const FilterProvider = ({ children }: { children: ReactNode }) => {
+  const [filters, setFilters] = useState<FilterState>(initialState);
+  const { productsData } = useProduct();
+  const { } = useCategory();
+
+  return (
+    <Suspense fallback={<div>Loading filters...</div>}>
+      <FilterProviderContent>{children}</FilterProviderContent>
+    </Suspense>
+  );
+};
+
+const FilterProviderContent = ({ children }: { children: ReactNode }) => {
   const [filters, setFilters] = useState<FilterState>(initialState);
   const { productsData } = useProduct();
   const { } = useCategory();

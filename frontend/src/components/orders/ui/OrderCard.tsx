@@ -9,7 +9,7 @@ interface OrderItem {
   product?: {
     id: number;
     name: string;
-    imageUrl?: string;
+    imageUrl: string | null;
   };
 }
 
