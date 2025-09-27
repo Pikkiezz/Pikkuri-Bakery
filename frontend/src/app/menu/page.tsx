@@ -1,7 +1,6 @@
 import { Header, Footer } from '@/components/layout';
 import MenuHero from '@/components/menu/MenuHero';
 import MenuCategories from '@/components/menu/MenuCategories';
-import MenuCTA from '@/components/menu/MenuCTA';
 
 const Menu = () => {
   return (

@@ -53,8 +53,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModalProps)
       onClose(); // Close modal after successful registration
       // Switch to login modal after successful registration
       onSwitchToLogin();
-    } catch (err) {
-      // Error is handled by AuthContext and displayed in UI
+    } catch {
     }
   };
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useCart } from '@/contexts/CartContext';
+import Image from 'next/image';
 
 interface CartItemProps {
   item: {
@@ -35,9 +36,11 @@ const CartItem = ({ item, onUpdateQuantity, onRemoveItem }: CartItemProps) => {
     <div className="flex-shrink-0">
       <div className="w-16 h-16 rounded-xl overflow-hidden shadow-lg">
         {item.image ? (
-          <img
+          <Image
             src={item.image}
             alt={item.name}
+            width={64}
+            height={64}
             className="w-full h-full object-cover"
           />
         ) : (

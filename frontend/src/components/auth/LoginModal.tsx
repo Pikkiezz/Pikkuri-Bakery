@@ -64,8 +64,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }: LoginModalProps) =>
       
       await login(loginData);
       onClose(); // Close modal after successful login
-    } catch (err) {
-      // Error is handled by AuthContext and displayed in UI
+    } catch {
     }
   };
 
@@ -148,7 +147,7 @@ const LoginModal = ({ isOpen, onClose, onSwitchToRegister }: LoginModalProps) =>
       {/* Switch to Register */}
       <div className="mt-6 text-center">
         <p className="text-stone-600 font-quicksand">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <button
             type="button"
             onClick={onSwitchToRegister}
