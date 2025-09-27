@@ -21,7 +21,7 @@ interface CartState {
 
 interface CartContextType {
   state: CartState;
-  addToCart: (productId: number, quantity?: number, productData?: { name: string; price: number; image?: string }) => Promise<void>;
+  addToCart: (productId: number, quantity?: number) => Promise<void>;
   removeFromCart: (id: number) => Promise<void>;
   updateQuantity: (id: number, quantity: number) => Promise<void>;
   clearCart: () => Promise<void>;
@@ -92,7 +92,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Add item to cart
-  const addToCart = async (productId: number, quantity: number = 1, productData?: { name: string; price: number; image?: string }) => {
+  const addToCart = async (productId: number, quantity: number = 1) => {
     try {
       setIsLoading(true);
       setError(null);

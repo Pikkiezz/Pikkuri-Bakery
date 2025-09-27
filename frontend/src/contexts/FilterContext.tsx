@@ -46,7 +46,7 @@ const FilterContext = createContext<FilterContextType | undefined>(undefined);
 export const FilterProvider = ({ children }: { children: ReactNode }) => {
   const [filters, setFilters] = useState<FilterState>(initialState);
   const { productsData } = useProduct();
-  const { categories } = useCategory();
+  const { } = useCategory();
   const searchParams = useSearchParams();
 
   // Read search query from URL parameters

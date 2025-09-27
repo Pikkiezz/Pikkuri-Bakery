@@ -1,4 +1,4 @@
-import { apiClient, API_CONFIG } from '@/config/api';
+import { apiClient } from '@/config/api';
 
 export interface User {
   id: number;
@@ -99,10 +99,10 @@ export class AuthService {
       };
       this.storeAuthData(authData);
       return authData;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Login failed:', error);
       // Extract server error message if available
-      const serverMessage = error?.response?.data?.message || error?.message;
+      const serverMessage = (error as { response?: { data?: { message?: string } } })?.response?.data?.message || (error as Error)?.message;
       throw new Error(serverMessage || 'Login failed. Please check your credentials.');
     }
   }
@@ -119,10 +119,10 @@ export class AuthService {
       };
       // Don't store auth data on signup, user needs to login
       return authData;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Registration failed:', error);
       // Extract server error message if available
-      const serverMessage = error?.response?.data?.message || error?.message;
+      const serverMessage = (error as { response?: { data?: { message?: string } } })?.response?.data?.message || (error as Error)?.message;
       throw new Error(serverMessage || 'Registration failed. Please try again.');
     }
   }

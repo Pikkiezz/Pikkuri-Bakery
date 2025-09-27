@@ -32,9 +32,9 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
     
       const response = await apiClient.get<Category[]>(API_CONFIG.ENDPOINTS.PRODUCTS.CATEGORIES);
       setCategories(response.data || []);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error fetching categories:', err);
-      setError(err.message);
+      setError(err instanceof Error ? err.message : 'Failed to fetch categories');
     } finally {
       setLoading(false);
     }
