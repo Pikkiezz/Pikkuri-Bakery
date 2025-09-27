@@ -38,7 +38,7 @@ export class CheckoutService {
           shippingMethod: 'STANDARD' // Default shipping method
         }
       );
-      return response.data;
+      return response.data!;
       
     } catch (error) {
       console.error('Checkout failed:', error);

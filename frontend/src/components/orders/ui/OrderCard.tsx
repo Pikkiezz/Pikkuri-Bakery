@@ -79,7 +79,7 @@ const OrderCard = ({ order }: OrderCardProps) => {
           {statusInfo.text}
         </div>
         <p className="text-2xl font-bold text-stone-700 mt-2 font-poppins">
-          ${order.total.toFixed(2)}
+          {order.total.toFixed(2)} ฿
         </p>
       </div>
     </div>
@@ -110,12 +110,12 @@ const OrderCard = ({ order }: OrderCardProps) => {
               {item.product?.name || 'Unknown Product'}
             </h4>
             <p className="text-stone-600 font-quicksand">
-              Qty: {item.quantity} × ${item.price.toFixed(2)}
+              Qty: {item.quantity} × {item.price.toFixed(2)} ฿
             </p>
           </div>
           <div className="text-right">
             <p className="text-sm font-bold text-stone-700 font-poppins">
-              ${(item.price * item.quantity).toFixed(2)}
+              {(item.price * item.quantity).toFixed(2)} ฿
             </p>
           </div>
         </div>

@@ -39,7 +39,6 @@ export const ProductProvider = ({ children }: ProductProviderProps) => {
       setError(null);
       const response = await apiClient.get<ProductsResponse>(API_CONFIG.ENDPOINTS.PRODUCTS.LIST);
       setProductsData(response.data!);
-      console.log(response.data);
     } catch (err: any) {
       setError(err.message);
     } finally {

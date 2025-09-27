@@ -79,7 +79,7 @@ const RegisterModal = ({ isOpen, onClose, onSwitchToLogin }: RegisterModalProps)
       {/* Header */}
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-stone-800 mb-2 font-fredoka">
-          🎉 Join Pikkuri
+          Join Pikkuri Bakery
         </h2>
         <p className="text-stone-600 font-quicksand">
           Create your account to get started

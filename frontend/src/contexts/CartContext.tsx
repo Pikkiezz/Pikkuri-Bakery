@@ -62,7 +62,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   // Load cart from API on mount (only when component is used)
   useEffect(() => {
-    console.log('🔄 CartContext useEffect - calling refreshCart');
     refreshCart();
   }, []);
 
@@ -70,25 +69,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // Refresh cart from API
   const refreshCart = async () => {
     try {
-      console.log('🔄 refreshCart - starting...');
       setIsLoading(true);
       setError(null);
-      console.log('🔄 refreshCart - calling cartService.getCart()');
       const cart = await cartService.getCart();
-      console.log('🔄 refreshCart - Cart from API:', cart);
       const items = cart.items.map(convertApiCartItem);
-      console.log('Converted items:', items);
       const { total, itemCount } = calculateTotals(items);
-      console.log('Calculated totals:', { total, itemCount });
       
       setState({ items, total, itemCount });
-      console.log('Cart state updated');
     } catch (err) {
       console.error('Failed to refresh cart:', err);
       
       // Check if it's an authentication error
       if (err instanceof Error && err.message.includes('Invalid token')) {
-        console.log('🔄 Token expired, clearing auth data');
         // Clear auth data (don't redirect to avoid infinite loop)
         if (typeof window !== 'undefined') {
           localStorage.removeItem('user_data');

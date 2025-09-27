@@ -46,14 +46,14 @@ export interface Shipping {
 class OrderService {
   // Get user's orders
   async getUserOrders(): Promise<Order[]> {
-    const response = await apiClient.get<{ status: string; data: Order[] }>('/orders/user');
-    return response.data;
+    const response = await apiClient.get<Order[]>('/orders/user');
+    return response.data!;
   }
 
   // Get order by ID
   async getOrderById(id: number): Promise<Order> {
-    const response = await apiClient.get<{ status: string; data: Order }>(`/orders/user/${id}`);
-    return response.data;
+    const response = await apiClient.get<Order>(`/orders/user/${id}`);
+    return response.data!;
   }
 
   // Cancel order

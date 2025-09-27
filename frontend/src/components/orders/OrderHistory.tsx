@@ -2,14 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { OrderCard, OrderFilter } from './ui';
+import { OrderCard } from './ui';
 import { orderService } from '@/services/orderService';
 
 
 const OrderHistory = () => {
   const searchParams = useSearchParams();
   const [orders, setOrders] = useState<any[]>([]);
-  const [statusFilter, setStatusFilter] = useState('all');
   const [newOrderId, setNewOrderId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -49,11 +48,6 @@ const OrderHistory = () => {
     }
   }, [searchParams]);
 
-  // Filter orders based on status
-  const filteredOrders = orders.filter(order => {
-    const matchesStatus = statusFilter === 'all' || order.status?.toLowerCase() === statusFilter.toLowerCase();
-    return matchesStatus;
-  });
 
  
 
@@ -68,21 +62,9 @@ const OrderHistory = () => {
           {' '}History
         </span>
       </h1>
-      <p className="text-xl text-stone-700 font-quicksand">
-        Track your past orders and reorder your favorites
-      </p>
     </div>
   );
 
-  // Render filters
-  const renderFilters = () => (
-    <div className="mb-8">
-      <OrderFilter
-        statusFilter={statusFilter}
-        onStatusChange={setStatusFilter}
-      />
-    </div>
-  );
 
   // Render orders list
   const renderOrdersList = () => {
@@ -97,8 +79,8 @@ const OrderHistory = () => {
 
     return (
       <div className="space-y-6">
-        {filteredOrders.length > 0 ? (
-          filteredOrders.map((order) => (
+        {orders.length > 0 ? (
+          orders.map((order) => (
             <OrderCard
               key={order.id}
               order={order}
@@ -109,10 +91,7 @@ const OrderHistory = () => {
             <div className="text-6xl mb-4">📦</div>
             <h3 className="text-xl font-bold text-stone-700 mb-2 font-fredoka">No orders found</h3>
             <p className="text-stone-600 font-quicksand">
-              {statusFilter !== 'all' 
-                ? 'Try adjusting your filter criteria'
-                : 'You haven\'t placed any orders yet'
-              }
+              You haven't placed any orders yet
             </p>
           </div>
         )}
@@ -124,7 +103,6 @@ const OrderHistory = () => {
     <div className="py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {renderPageHeader()}
-        {renderFilters()}
         {renderOrdersList()}
       </div>
     </div>

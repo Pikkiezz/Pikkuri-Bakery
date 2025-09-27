@@ -1,5 +1,5 @@
 // App constants
-export const APP_NAME = 'Pikkuri';
+export const APP_NAME = 'Pikkuri Bakery';
 export const APP_DESCRIPTION = 'Premium Bakery & Coffee Shop';
 
 // Colors

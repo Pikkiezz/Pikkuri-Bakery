@@ -1,9 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 
 const Hero = () => {
+
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-stone-50 via-amber-50 to-stone-100 overflow-hidden">
       {/* Floating decorative elements */}
@@ -28,73 +30,53 @@ const Hero = () => {
                 </span>
               </h1>
               <p className="text-xl text-stone-700 mb-8 max-w-lg mx-auto lg:mx-0 font-quicksand">
-                Indulge in our freshly baked croissants, artisanal breads, and delicious pastries made with love and premium ingredients! ☕
+              Try our fresh croissants, homemade bread, and tasty pastries. We make them with care and good ingredients! ☕
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link
-                  href="/products"
+                  href="/menu"
                   className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-stone-600 to-amber-600 text-white font-bold rounded-full text-lg transition-all duration-300 hover:scale-110 hover:shadow-2xl transform hover:-translate-y-2 font-poppins"
                 >
-                  🥐 Order Now
+                  🥐 view menu
                   <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
                 </Link>
-                <Link
-                  href="/categories"
-                  className="inline-flex items-center px-8 py-4 bg-white text-stone-700 font-bold rounded-full text-lg transition-all duration-300 hover:scale-110 hover:shadow-xl border-2 border-stone-300 hover:border-stone-500 font-poppins"
-                >
-                  ☕ View Menu
-                </Link>
+
               </div>
             </div>
 
             {/* Right content - Floating product cards */}
             <div className="relative">
               <div className="grid grid-cols-2 gap-6 max-w-lg mx-auto">
-                {/* Product 1 */}
-                <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl transform rotate-3 hover:rotate-0 transition-all duration-500 hover:scale-110 animate-float">
-                  <div className="w-24 h-24 bg-gradient-to-br from-stone-200 to-amber-200 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
-                    <span className="text-4xl">🥐</span>
+                  {/* Product 1 */}
+                  <div 
+                    className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl transform rotate-3 hover:rotate-0 transition-all duration-500 hover:scale-110 animate-float bg-cover bg-center bg-no-repeat min-h-[200px] flex items-center justify-center"
+                    style={{ backgroundImage: 'url(/images/Croissant.jpg)' }}
+                  >
                   </div>
-                  <div className="text-center">
-                    <div className="text-sm font-bold text-stone-700 mb-1">CROISSANTS</div>
-                    <div className="text-xs text-stone-600">Buttery & Flaky</div>
-                  </div>
-                </div>
 
                 {/* Product 2 */}
-                <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl transform -rotate-2 hover:rotate-0 transition-all duration-500 hover:scale-110 animate-float-delay-1">
-                  <div className="w-24 h-24 bg-gradient-to-br from-amber-200 to-stone-200 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
-                    <span className="text-4xl">☕</span>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-sm font-bold text-stone-700 mb-1">COFFEE</div>
-                    <div className="text-xs text-stone-600">Rich & Aromatic</div>
-                  </div>
+                <div 
+                  className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl transform -rotate-2 hover:rotate-0 transition-all duration-500 hover:scale-110 animate-float-delay-1 bg-cover bg-center bg-no-repeat min-h-[200px] flex items-center justify-center"
+                  style={{ backgroundImage: 'url(/images/coffee.jpg)' }}
+                >
                 </div>
 
                 {/* Product 3 */}
-                <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl transform rotate-1 hover:rotate-0 transition-all duration-500 hover:scale-110 animate-float-delay-2">
-                  <div className="w-24 h-24 bg-gradient-to-br from-stone-200 to-amber-300 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
-                    <span className="text-4xl">🧁</span>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-sm font-bold text-stone-700 mb-1">CUPCAKES</div>
-                    <div className="text-xs text-stone-600">Sweet & Moist</div>
-                  </div>
+                <div 
+                  className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl transform -rotate-2 hover:rotate-0 transition-all duration-500 hover:scale-110 animate-float-delay-1 bg-cover bg-center bg-no-repeat min-h-[200px] flex items-center justify-center"
+                   style={{ backgroundImage: 'url(/images/cupcake.jpg)' }}
+                >
                 </div>
 
                 {/* Product 4 */}
-                <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl transform -rotate-1 hover:rotate-0 transition-all duration-500 hover:scale-110 animate-float-delay-3">
-                  <div className="w-24 h-24 bg-gradient-to-br from-amber-200 to-stone-300 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
-                    <span className="text-4xl">🍰</span>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-sm font-bold text-stone-700 mb-1">CAKES</div>
-                    <div className="text-xs text-stone-600">Delicious & Fresh</div>
-                  </div>
+                <div 
+                  className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl transform rotate-2 hover:rotate-0 transition-all duration-500 hover:scale-110 animate-float-delay-1 bg-cover bg-center bg-no-repeat min-h-[200px] flex items-center justify-center"
+                   style={{ backgroundImage: 'url(/images/cake.jpg)' }}
+                >
                 </div>
+
               </div>
             </div>
           </div>

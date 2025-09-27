@@ -12,11 +12,10 @@ const ScrollingTags = () => {
 
   return (
     <section className="bg-amber-100 py-8 overflow-hidden relative">
-      {/* Decorative elements */}
-     
+      
       
       <div className="flex animate-scroll relative z-10">
-        {/* First set */}
+    
         {tags.map((tag, index) => (
           <div key={`first-${index}`} className="flex items-center whitespace-nowrap mx-8">
             <div className={`text-stone-700 px-6 py-3 rounded-full border-2 border-stone-400 hover:scale-110 transition-transform duration-300 flex items-center bg-white/80`}>
@@ -26,7 +25,7 @@ const ScrollingTags = () => {
           </div>
         ))}
         
-        {/* Second set for seamless loop */}
+        
         {tags.map((tag, index) => (
           <div key={`second-${index}`} className="flex items-center whitespace-nowrap mx-8">
             <div className={`text-stone-700 px-6 py-3 rounded-full border-2 border-stone-400 hover:scale-110 transition-transform duration-300 flex items-center bg-white/80`}>
@@ -36,7 +35,7 @@ const ScrollingTags = () => {
           </div>
         ))}
         
-        {/* Third set for seamless loop */}
+    
         {tags.map((tag, index) => (
           <div key={`third-${index}`} className="flex items-center whitespace-nowrap mx-8">
             <div className={`text-stone-700 px-6 py-3 rounded-full border-2 border-stone-400 hover:scale-110 transition-transform duration-300 flex items-center bg-white/80`}>

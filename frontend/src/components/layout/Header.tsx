@@ -42,7 +42,6 @@ const Header = () => {
 
   // Handle profile dropdown toggle
   const handleProfileToggle = () => {
-    console.log('Profile toggle clicked, current state:', isProfileOpen);
     setIsProfileOpen(!isProfileOpen);
   };
 
@@ -107,7 +106,7 @@ const Header = () => {
           <div className="flex-shrink-0 flex items-center">
             <div className="text-4xl mr-3">☕</div>
             <Link href="/" className="text-3xl font-bold bg-gradient-to-r from-stone-700 to-amber-600 bg-clip-text text-transparent hover:scale-110 transition-transform duration-300 font-fredoka">
-              Pikkuri
+              Pikkuri Bakery
             </Link>
           </div>
 
@@ -220,14 +219,14 @@ const Header = () => {
                         className="block px-4 py-3 text-sm text-stone-700 hover:bg-stone-100 transition-colors font-quicksand"
                         onClick={handleProfileClose}
                       >
-                        📦 My Orders
+                        My Orders
                       </Link>
                       <hr className="my-2 border-stone-200" />
                       <button
                         className="block w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors font-quicksand"
                         onClick={handleLogout}
                       >
-                        🚪 Logout
+                        Logout
                       </button>
                     </>
                   ) : (
@@ -237,13 +236,13 @@ const Header = () => {
                         className="block w-full text-left px-4 py-3 text-sm text-stone-700 hover:bg-stone-100 transition-colors font-quicksand"
                         onClick={handleLogin}
                       >
-                        🔐 Sign In
+                        Sign In
                       </button>
                       <button
                         className="block w-full text-left px-4 py-3 text-sm text-stone-700 hover:bg-stone-100 transition-colors font-quicksand"
                         onClick={handleRegister}
                       >
-                        🎉 Sign Up
+                        Sign Up
                       </button>
                     </>
                   )}
@@ -281,7 +280,7 @@ const Header = () => {
                     : 'text-stone-700 hover:text-stone-600 hover:bg-stone-100'
                 }`}
               >
-                🏠 HOME
+                HOME
               </Link>
               <Link 
                 href="/menu" 
@@ -291,7 +290,7 @@ const Header = () => {
                     : 'text-stone-700 hover:text-stone-600 hover:bg-stone-100'
                 }`}
               >
-                🥐 MENU
+                MENU
               </Link>
               <Link 
                 href="/orders" 
@@ -301,18 +300,9 @@ const Header = () => {
                     : 'text-stone-700 hover:text-stone-600 hover:bg-stone-100'
                 }`}
               >
-                📦 ORDERS
+                ORDERS
               </Link>
-              <Link 
-                href="/about" 
-                className={`block px-4 py-3 text-base font-bold transition-colors rounded-xl ${
-                  pathname === '/about' 
-                    ? 'text-white bg-gradient-to-r from-stone-600 to-amber-600 shadow-lg' 
-                    : 'text-stone-700 hover:text-stone-600 hover:bg-stone-100'
-                }`}
-              >
-                📖 OUR STORY
-              </Link>
+        
               <a 
                 href="#contact" 
                 className="block px-4 py-3 text-base font-bold transition-colors rounded-xl text-stone-700 hover:text-stone-600 hover:bg-stone-100"
@@ -325,7 +315,7 @@ const Header = () => {
                   });
                 }}
               >
-                📞 CONTACT
+                CONTACT
               </a>
             </div>
           </div>

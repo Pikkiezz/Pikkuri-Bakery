@@ -653,18 +653,6 @@ export const checkout = async ({ body, store }: { body: CreateOrderBody, store?:
       };
     });
 
-    // Schedule auto-confirm after 5 seconds
-    setTimeout(async () => {
-      try {
-        await db.order.update({
-          where: { id: result.order.id },
-          data: { status: "CONFIRMED" }
-        });
-        console.log(`Order ${result.order.id} auto-confirmed after 5 seconds`);
-      } catch (error) {
-        console.error(`Failed to auto-confirm order ${result.order.id}:`, error);
-      }
-    }, 5000); 
 
     return {
       status: "success",

@@ -92,7 +92,6 @@ export class AuthService {
   async login(credentials: LoginRequest): Promise<AuthResponse> {
     try {
       const response = await apiClient.post<{ status: string; message: string; token: string; data: User }>('/users/login', credentials);
-      console.log('AuthService - login response:', response.data);
       const authData: AuthResponse = {
         user: response.data as unknown as User,
         token: response.data?.token as string,

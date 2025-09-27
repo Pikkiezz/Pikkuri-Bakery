@@ -24,9 +24,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Pikkuri - Premium Spice Blends & Herb Mixes",
-  description: "Discover original spice blends and herb mixes suitable for both home and professional cooking. Elevate your culinary experience with Pikkuri.",
-  keywords: "spices, herbs, spice blends, seasoning, gourmet, cooking, culinary, Pikkuri",
+  title: "Pikkuri Bakery - Fresh Baked Goods & Artisanal Coffee",
+  description: "Discover fresh baked goods and artisanal coffee crafted with love. Elevate your morning experience with Pikkuri Bakery.",
+  keywords: "bakery, coffee, croissants, bread, pastries, artisanal, fresh, Pikkuri Bakery",
 };
 
 export default function RootLayout({
