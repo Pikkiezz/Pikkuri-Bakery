@@ -92,7 +92,7 @@ export class AuthService {
   async login(credentials: LoginRequest): Promise<AuthResponse> {
     try {
       const response: any = await apiClient.post<{ status: string; message: string; token: string; data: User }>('/users/login', credentials); // eslint-disable-line
-      n
+      
       console.log('Login response:', response.data);
       
       const authData: AuthResponse = {
