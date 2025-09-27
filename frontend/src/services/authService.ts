@@ -92,11 +92,16 @@ export class AuthService {
   async login(credentials: LoginRequest): Promise<AuthResponse> {
     try {
       const response = await apiClient.post<{ status: string; message: string; token: string; data: User }>('/users/login', credentials);
+      
+      console.log('Login response:', response.data);
+      
       const authData: AuthResponse = {
-        user: response.data as unknown as User,
+        user: response.data?.data as User,
         token: response.data?.token as string,
         refreshToken: response.data?.token as string // Use same token as refresh for now
       };
+      
+      console.log('Stored auth data:', authData);
       this.storeAuthData(authData);
       return authData;
     } catch (error: unknown) {

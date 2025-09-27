@@ -49,6 +49,7 @@ export const API_CONFIG = {
   }
 };
 
+
 // API Client with error handling
 export class ApiClient {
   private baseURL: string;
@@ -68,9 +69,15 @@ export class ApiClient {
         'Content-Type': 'application/json',
         ...options.headers,
       },
-      credentials: 'include', // Include cookies in requests
+      credentials: 'include', // Include cookies in requests (this is the key!)
       ...options,
     };
+    
+    console.log('API Request:', {
+      url,
+      credentials: config.credentials,
+      headers: config.headers
+    });
 
     try {
       const response = await fetch(url, config);

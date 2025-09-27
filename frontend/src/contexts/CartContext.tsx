@@ -83,11 +83,23 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     } catch (err) {
       console.error('Failed to refresh cart:', err);
       
-      // is an authentication error
-      if (err instanceof Error && err.message.includes('Invalid token')) {
-        // Clear auth data 
-        if (typeof window !== 'undefined') {
-          localStorage.removeItem('user_data');
+      // Handle different types of errors
+      if (err instanceof Error) {
+        if (err.message.includes('Invalid token') || err.message.includes('401')) {
+          // Authentication error - clear auth data and show empty cart
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('user_data');
+          }
+          setState({ items: [], total: 0, itemCount: 0 });
+          setError(null); // Don't show error for auth issues
+          return;
+        }
+        
+        if (err.message.includes('404') || err.message.includes('Not Found')) {
+          // No cart found - show empty cart
+          setState({ items: [], total: 0, itemCount: 0 });
+          setError(null);
+          return;
         }
       }
       
