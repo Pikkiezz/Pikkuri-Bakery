@@ -57,7 +57,7 @@ export class ApiClient {
     this.baseURL = baseURL;
   }
 
-  private async request<T = any>(
+  private async request<T = unknown>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
@@ -83,7 +83,7 @@ export class ApiClient {
           if (errorData.message) {
             errorMessage = errorData.message;
           }
-        } catch (jsonError) {
+        } catch {
           // If can't parse JSON, use default message
         }
         throw new Error(errorMessage);
@@ -98,12 +98,12 @@ export class ApiClient {
   }
 
   // GET request
-  async get<T = any>(endpoint: string): Promise<ApiResponse<T>> {
+  async get<T = unknown>(endpoint: string): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, { method: 'GET' });
   }
 
   // POST request
-  async post<T = any>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
+  async post<T = unknown>(endpoint: string, data?: unknown): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, {
       method: 'POST',
       body: data ? JSON.stringify(data) : undefined,
@@ -111,7 +111,7 @@ export class ApiClient {
   }
 
   // PUT request
-  async put<T = any>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
+  async put<T = unknown>(endpoint: string, data?: unknown): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, {
       method: 'PUT',
       body: data ? JSON.stringify(data) : undefined,
@@ -119,7 +119,7 @@ export class ApiClient {
   }
 
   // PATCH request
-  async patch<T = any>(endpoint: string, data?: any): Promise<ApiResponse<T>> {
+  async patch<T = unknown>(endpoint: string, data?: unknown): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, {
       method: 'PATCH',
       body: data ? JSON.stringify(data) : undefined,
@@ -127,7 +127,7 @@ export class ApiClient {
   }
 
   // DELETE request
-  async delete<T = any>(endpoint: string): Promise<ApiResponse<T>> {
+  async delete<T = unknown>(endpoint: string): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, { method: 'DELETE' });
   }
 }

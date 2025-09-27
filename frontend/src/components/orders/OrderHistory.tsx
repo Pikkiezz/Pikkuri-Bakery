@@ -3,13 +3,12 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { OrderCard } from './ui';
-import { orderService } from '@/services/orderService';
+import { orderService, Order } from '@/services/orderService';
 
 
 const OrderHistory = () => {
   const searchParams = useSearchParams();
-  const [orders, setOrders] = useState<any[]>([]);
-  const [newOrderId, setNewOrderId] = useState<string | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
   // get orders
@@ -34,7 +33,6 @@ const OrderHistory = () => {
   useEffect(() => {
     const orderId = searchParams.get('orderId');
     if (orderId) {
-      setNewOrderId(orderId);
       const fetchOrders = async () => {
         try {
           const ordersData = await orderService.getUserOrders();
@@ -90,7 +88,7 @@ const OrderHistory = () => {
             <div className="text-6xl mb-4">📦</div>
             <h3 className="text-xl font-bold text-stone-700 mb-2 font-fredoka">No orders found</h3>
             <p className="text-stone-600 font-quicksand">
-              You haven't placed any orders yet
+              You haven&apos;t placed any orders yet
             </p>
           </div>
         )}

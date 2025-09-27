@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 
 interface OrderItem {
   id: number;
@@ -93,9 +94,11 @@ const OrderCard = ({ order }: OrderCardProps) => {
           <div className="flex-shrink-0">
             <div className="w-12 h-12 rounded-lg overflow-hidden shadow-md">
               {item.product?.imageUrl ? (
-                <img
+                <Image
                   src={item.product.imageUrl}
                   alt={item.product.name}
+                  width={48}
+                  height={48}
                   className="w-full h-full object-cover"
                 />
               ) : (
