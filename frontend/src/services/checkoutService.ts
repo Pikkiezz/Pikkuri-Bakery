@@ -1,4 +1,4 @@
-import { apiClient, API_CONFIG } from '@/config/api';
+import { apiClient } from '@/config/api';
 
 export interface CheckoutItem {
   id: number;

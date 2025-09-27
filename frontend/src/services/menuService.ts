@@ -1,5 +1,4 @@
 import { apiClient, API_CONFIG } from '@/config/api';
-import type { ProductResponse } from '@/types';
 
 // Types (should match your Prisma models)
 export interface MenuItem {

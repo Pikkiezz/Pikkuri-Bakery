@@ -57,20 +57,20 @@ class OrderService {
   }
 
   // Cancel order
-  async cancelOrder(orderId: number, reason?: string): Promise<any> {
-    const response = await apiClient.post<{ status: string; data: any }>('/orders/user/cancel', {
+  async cancelOrder(orderId: number, reason?: string): Promise<{ status: string; data: unknown }> {
+    const response = await apiClient.post<{ status: string; data: unknown }>('/orders/user/cancel', {
       orderId,
       reason
     });
-    return response.data;
+    return response.data!;
   }
 
   // Update order status (for auto-update)
-  async updateOrderStatus(orderId: number, status: string): Promise<any> {
-    const response = await apiClient.patch<{ status: string; data: any }>(`/orders/admin/${orderId}/status`, {
+  async updateOrderStatus(orderId: number, status: string): Promise<{ status: string; data: unknown }> {
+    const response = await apiClient.patch<{ status: string; data: unknown }>(`/orders/admin/${orderId}/status`, {
       status
     });
-    return response.data;
+    return response.data!;
   }
 }
 

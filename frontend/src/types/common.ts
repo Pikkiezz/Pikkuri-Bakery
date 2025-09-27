@@ -6,9 +6,9 @@ export interface CustomError extends Error {
 }
 
 export interface Headers {
-  authorization?: any;
-  'content-type'?: any;
-  'user-agent'?: any;
+  authorization?: string;
+  'content-type'?: string;
+  'user-agent'?: string;
   [key: string]: string | string[] | undefined;
 }
 
@@ -28,7 +28,7 @@ export interface Store {
   };
 }
 
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   status: 'success' | 'error';
   requestTime?: string;
   data?: T;
