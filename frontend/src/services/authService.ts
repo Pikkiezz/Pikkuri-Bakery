@@ -91,14 +91,14 @@ export class AuthService {
   // Login
   async login(credentials: LoginRequest): Promise<AuthResponse> {
     try {
-      const response = await apiClient.post<{ status: string; message: string; token: string; data: User }>('/users/login', credentials);
-      
+      const response: any = await apiClient.post<{ status: string; message: string; token: string; data: User }>('/users/login', credentials); // eslint-disable-line
+      n
       console.log('Login response:', response.data);
       
       const authData: AuthResponse = {
-        user: response.data?.data as User,
-        token: response.data?.token as string,
-        refreshToken: response.data?.token as string // Use same token as refresh for now
+        user: response.data as unknown as User,
+        token: response.token as unknown as string,
+        refreshToken: response.token as unknown as string // Use same token as refresh for now
       };
       
       console.log('Stored auth data:', authData);
