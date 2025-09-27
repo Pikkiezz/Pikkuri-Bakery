@@ -1,4 +1,4 @@
-// Product related types
+
 
 export interface CreateProductBody {
   name: string;

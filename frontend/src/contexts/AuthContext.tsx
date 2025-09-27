@@ -21,7 +21,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Initialize auth state on mount
   useEffect(() => {
     initializeAuth();
   }, []);
@@ -32,7 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setIsLoading(true);
       setError(null);
 
-      // Check if user is already logged in
+      // is already logged in
       if (authService.isAuthenticated()) {
         const storedUser = authService.getUser();
         if (storedUser) {
@@ -42,7 +41,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (err) {
       console.error('Auth initialization failed:', err);
       setError(err instanceof Error ? err.message : 'Authentication failed');
-      // Clear invalid auth data
+      // Clear invalid data
       authService.clearAuthData();
     } finally {
       setIsLoading(false);
@@ -58,7 +57,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(authData.user);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
-      throw err; // Re-throw to handle in component
+      throw err; 
     } finally {
       setIsLoading(false);
     }
@@ -71,11 +70,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setError(null);
       const authData = await authService.register(userData);
       setUser(authData.user);
-      return authData; // Return success data
+      return authData; 
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Registration failed';
       setError(errorMessage);
-      throw new Error(errorMessage); // Re-throw for component handling
+      throw new Error(errorMessage)
     } finally {
       setIsLoading(false);
     }
@@ -89,7 +88,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       await authService.logout();
       setUser(null);
       
-      // Redirect to home if currently on protected page
+      // Redirect to home 
       if (typeof window !== 'undefined') {
         const currentPath = window.location.pathname;
         if (currentPath === '/cart' || currentPath === '/orders' || currentPath.startsWith('/profile')) {
@@ -98,7 +97,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
     } catch (err) {
       console.error('Logout error:', err);
-      // Clear local state even if server logout fails
       setUser(null);
     } finally {
       setIsLoading(false);

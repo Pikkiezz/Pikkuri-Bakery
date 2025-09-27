@@ -18,21 +18,19 @@ interface CartItemProps {
 const CartItem = ({ item, onUpdateQuantity, onRemoveItem }: CartItemProps) => {
   const { updateQuantity: contextUpdateQuantity, removeFromCart: contextRemoveFromCart } = useCart();
   
-  // Use props if provided, otherwise use context
+
   const updateQuantity = onUpdateQuantity || contextUpdateQuantity;
   const removeFromCart = onRemoveItem || contextRemoveFromCart;
 
-  // Handle quantity update
+
   const handleQuantityUpdate = (change: number) => {
     updateQuantity(item.id, item.quantity + change);
   };
 
-  // Handle remove item
   const handleRemoveItem = () => {
     removeFromCart(item.id);
   };
 
-  // Render product image
   const renderProductImage = () => (
     <div className="flex-shrink-0">
       <div className="w-16 h-16 rounded-xl overflow-hidden shadow-lg">
@@ -51,7 +49,7 @@ const CartItem = ({ item, onUpdateQuantity, onRemoveItem }: CartItemProps) => {
     </div>
   );
 
-  // Render product info
+
   const renderProductInfo = () => (
     <div className="flex-1 min-w-0">
       <h3 className="text-lg font-bold text-stone-700 font-poppins truncate">
@@ -63,7 +61,7 @@ const CartItem = ({ item, onUpdateQuantity, onRemoveItem }: CartItemProps) => {
     </div>
   );
 
-  // Render quantity controls
+
   const renderQuantityControls = () => (
     <div className="flex items-center space-x-2">
       <button
@@ -85,7 +83,7 @@ const CartItem = ({ item, onUpdateQuantity, onRemoveItem }: CartItemProps) => {
     </div>
   );
 
-  // Render price
+
   const renderPrice = () => (
     <div className="text-right">
       <p className="text-lg font-bold text-stone-700 font-poppins">
@@ -94,7 +92,7 @@ const CartItem = ({ item, onUpdateQuantity, onRemoveItem }: CartItemProps) => {
     </div>
   );
 
-  // Render remove button
+  
   const renderRemoveButton = () => (
     <button
       onClick={handleRemoveItem}

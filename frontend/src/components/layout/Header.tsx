@@ -20,32 +20,31 @@ const Header = () => {
   const { user, isAuthenticated, logout } = useAuth();
   const profileRef = useRef<HTMLDivElement>(null);
 
-  // Handle search input change
+  // search input
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
-  // Handle search submit
+  // search submit
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Redirect to menu page with search query as URL parameter
     if (filters.searchTerm.trim()) {
       const searchQuery = encodeURIComponent(filters.searchTerm.trim());
       window.location.href = `/menu?search=${searchQuery}`;
     }
   };
 
-  // Handle clear search
+  // clear search
   const handleClearSearch = () => {
     setSearchQuery('');
   };
 
-  // Handle profile dropdown toggle
+  // toggle profile
   const handleProfileToggle = () => {
     setIsProfileOpen(!isProfileOpen);
   };
 
-  // Handle profile dropdown close
+  // close profile
   const handleProfileClose = () => {
     setIsProfileOpen(false);
   };

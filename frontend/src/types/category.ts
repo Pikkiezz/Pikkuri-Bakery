@@ -1,4 +1,3 @@
-// Category related types
 
 export interface CreateCategoryBody {
   name: string;

@@ -1,4 +1,4 @@
-// Order related types
+
 
 export interface CreateOrderBody {
   itemIds: number[]; // Cart item IDs ที่จะสร้าง Order

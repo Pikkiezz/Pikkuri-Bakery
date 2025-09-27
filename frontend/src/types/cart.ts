@@ -1,4 +1,4 @@
-// Cart related types
+
 
 export interface AddToCartBody {
   productId: number;

@@ -1,4 +1,4 @@
-// Common types used across the application
+
 
 export interface CustomError extends Error {
   statusCode?: number;

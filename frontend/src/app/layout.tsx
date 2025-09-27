@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Fredoka, Quicksand, Poppins } from "next/font/google";
 import "./globals.css";
 import { CartProvider, FilterProvider, ProductProvider, CategoryProvider } from '@/contexts';
-import { ProfileProvider } from '@/contexts/ProfileContext';
 import { AuthProvider } from '@/contexts/AuthContext';
 
 const fredoka = Fredoka({
@@ -44,9 +43,7 @@ export default function RootLayout({
                       <ProductProvider>
                         <FilterProvider>
                           <CartProvider>
-                            <ProfileProvider>
-                              {children}
-                            </ProfileProvider>
+                            {children}
                           </CartProvider>
                         </FilterProvider>
                       </ProductProvider>

@@ -32,7 +32,7 @@ const CartSummary = ({ subtotal, onClearCart: propClearCart }: CartSummaryProps 
   const { state, clearCart: contextClearCart } = useCart();
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [shippingMethod, setShippingMethod] = useState('STANDARD');
-  // Use props if provided, otherwise use context
+
   const total = subtotal !== undefined ? subtotal : state.total;
   const clearCart = propClearCart || contextClearCart;
 
@@ -43,19 +43,19 @@ const CartSummary = ({ subtotal, onClearCart: propClearCart }: CartSummaryProps 
   const shippingInfo = getShippingInfo(shippingMethod);
   const totalAmount = total + shippingInfo.baseCost;
 
-  // Handle checkout
+
   const handleCheckout = () => {
     setIsCheckoutOpen(true);
   };
 
-  // Handle clear cart
+
   const handleClearCart = () => {
     if (confirm('Are you sure you want to clear your cart?')) {
       clearCart();
     }
   };
 
-  // Render order details
+
   const renderOrderDetails = () => (
     <div className="space-y-4 mb-6">
       <div className="flex justify-between text-stone-600">
@@ -91,7 +91,7 @@ const CartSummary = ({ subtotal, onClearCart: propClearCart }: CartSummaryProps 
     </div>
   );
 
-  // Render action buttons
+
   const renderActionButtons = () => (
     <div className="space-y-3">
       <button
@@ -117,17 +117,6 @@ const CartSummary = ({ subtotal, onClearCart: propClearCart }: CartSummaryProps 
     </div>
   );
 
-  // Render security badge
-  const renderSecurityBadge = () => (
-    <div className="mt-6 pt-6 border-t border-stone-200">
-      <div className="flex items-center justify-center space-x-2 text-stone-500 text-sm">
-        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-        </svg>
-        <span>Secure checkout</span>
-      </div>
-    </div>
-  );
 
   return (
     <>
@@ -135,7 +124,7 @@ const CartSummary = ({ subtotal, onClearCart: propClearCart }: CartSummaryProps 
         <h2 className="text-2xl font-bold text-stone-700 mb-6 font-fredoka">Order Summary</h2>
         {renderOrderDetails()}
         {renderActionButtons()}
-        {renderSecurityBadge()}
+       
       </div>
       
       <CheckoutModal

@@ -12,7 +12,7 @@ const OrderHistory = () => {
   const [newOrderId, setNewOrderId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch orders from API
+  // get orders
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -30,12 +30,11 @@ const OrderHistory = () => {
     fetchOrders();
   }, []);
 
-  // Check for new order ID from URL
+  // check new order
   useEffect(() => {
     const orderId = searchParams.get('orderId');
     if (orderId) {
       setNewOrderId(orderId);
-      // Refresh orders to get the new one
       const fetchOrders = async () => {
         try {
           const ordersData = await orderService.getUserOrders();

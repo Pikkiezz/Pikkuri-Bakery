@@ -30,17 +30,15 @@ interface CartContextType {
   refreshCart: () => Promise<void>;
 }
 
-// Helper function to convert API cart item to local cart item
 const convertApiCartItem = (apiItem: ApiCartItem): CartItem => ({
   id: apiItem.id,
   name: apiItem.product.name,
   price: apiItem.product.price,
   quantity: apiItem.quantity,
   image: apiItem.product.imageUrl || undefined,
-  emoji: '🍽️', // Default emoji
+  emoji: '🍽️', 
 });
 
-// Calculate totals
 const calculateTotals = (items: CartItem[]): { total: number; itemCount: number } => {
   const total = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -60,13 +58,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Load cart from API on mount (only when component is used)
+  // load cart
   useEffect(() => {
     refreshCart();
   }, []);
 
 
-  // Refresh cart from API
+  // get cart from api
   const refreshCart = async () => {
     try {
       setIsLoading(true);
@@ -79,9 +77,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     } catch (err) {
       console.error('Failed to refresh cart:', err);
       
-      // Check if it's an authentication error
+      // is an authentication error
       if (err instanceof Error && err.message.includes('Invalid token')) {
-        // Clear auth data (don't redirect to avoid infinite loop)
+        // Clear auth data 
         if (typeof window !== 'undefined') {
           localStorage.removeItem('user_data');
         }
@@ -105,7 +103,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       };
       
       await cartService.addToCart(request);
-      await refreshCart(); // Refresh cart after adding
+      await refreshCart(); 
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to add item to cart');
       console.error('Failed to add to cart:', err);

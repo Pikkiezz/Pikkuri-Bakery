@@ -1,4 +1,4 @@
-// Payment related types
+
 
 export interface CreditCardDetails {
   cardNumber: string;

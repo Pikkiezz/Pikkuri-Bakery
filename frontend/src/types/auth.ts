@@ -1,4 +1,3 @@
-// Authentication related types
 
 export interface CreateUserBody {
   username: string;

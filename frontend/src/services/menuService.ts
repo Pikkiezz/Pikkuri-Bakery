@@ -83,16 +83,16 @@ export class MenuService {
     }
   }
 
-  // Get single menu item by ID
-  async getMenuItemById(id: number): Promise<ProductResponse> {
-    try {
-      const response = await apiClient.get<ProductResponse>(API_CONFIG.ENDPOINTS.PRODUCTS.BY_ID(id));
-      return response.data!;
-    } catch (error) {
-      console.error(`Failed to fetch menu item ${id}:`, error);
-      throw new Error(`Failed to fetch menu item ${id}`);
-    }
-  }
+  // // Get single menu item by ID
+  // async getMenuItemById(id: number): Promise<ProductResponse> {
+  //   try {
+  //     const response = await apiClient.get<ProductResponse>(API_CONFIG.ENDPOINTS.PRODUCTS.BY_ID(id));
+  //     return response.data!;
+  //   } catch (error) {
+  //     console.error(`Failed to fetch menu item ${id}:`, error);
+  //     throw new Error(`Failed to fetch menu item ${id}`);
+  //   }
+  // }
 
   // Search menu items
   async searchMenuItems(query: string, filters?: Omit<MenuFilters, 'search'>): Promise<MenuResponse> {
