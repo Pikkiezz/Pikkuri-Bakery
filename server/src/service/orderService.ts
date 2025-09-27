@@ -129,18 +129,18 @@ export const cancelOrder = async ({ body, store }: { body: CancelOrderBody, stor
       }
 
       // 2. ตรวจสอบสถานะ Order
-      if (order.status === "CANCELED") {
+      if (order.status === "CANCELLED") {
         throw new ValidationError("Order is already canceled");
       }
 
-      if (order.status === "SHIPPED" || order.status === "COMPLETED") {
-        throw new ValidationError("Cannot cancel order that has been shipped or completed");
+      if (order.status === "SHIPPED" || order.status === "DELIVERED") {
+        throw new ValidationError("Cannot cancel order that has been shipped or delivered");
       }
 
       // 3. อัปเดตสถานะ Order เป็น CANCELED
       const updatedOrder = await tx.order.update({
         where: { id: body.orderId },
-        data: { status: "CANCELED" }
+        data: { status: "CANCELLED" }
       });
 
       // 4. คืน Stock ของสินค้าทั้งหมด
@@ -220,7 +220,7 @@ export const updateOrderStatus = async ({
     }
 
     // ตรวจสอบ valid status
-    const validStatuses = ["PENDING", "PAID", "SHIPPED", "COMPLETED", "CANCELED"];
+    const validStatuses = ["PENDING", "CONFIRMED", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"];
     if (!validStatuses.includes(body.status)) {
       throw new ValidationError("Invalid status");
     }

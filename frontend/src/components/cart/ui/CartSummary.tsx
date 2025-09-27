@@ -10,18 +10,38 @@ interface CartSummaryProps {
   onClearCart?: () => void;
 }
 
+const methodsShipping = {
+  STANDARD: {
+      name: "Standard Shipping",
+      duration: 5,
+      baseCost: 0
+  },
+  EXPRESS: {
+      name: "Express Shipping", 
+      duration: 3,
+      baseCost: 50
+  },
+  OVERNIGHT: {
+      name: "Overnight Shipping",
+      duration: 1,
+      baseCost: 100
+  }
+}
+
 const CartSummary = ({ subtotal, onClearCart: propClearCart }: CartSummaryProps = {}) => {
   const { state, clearCart: contextClearCart } = useCart();
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  
+  const [shippingMethod, setShippingMethod] = useState('STANDARD');
   // Use props if provided, otherwise use context
   const total = subtotal !== undefined ? subtotal : state.total;
   const clearCart = propClearCart || contextClearCart;
 
-  // Calculate shipping (free for orders over $50)
-  const shippingThreshold = 50;
-  const shippingCost = total >= shippingThreshold ? 0 : 5.99;
-  const finalTotal = total + shippingCost;
+  const getShippingInfo = (shippingMethod: string) => {
+    return methodsShipping[shippingMethod as keyof typeof methodsShipping];
+  }
+
+  const shippingInfo = getShippingInfo(shippingMethod);
+  const totalAmount = total + shippingInfo.baseCost;
 
   // Handle checkout
   const handleCheckout = () => {
@@ -40,30 +60,32 @@ const CartSummary = ({ subtotal, onClearCart: propClearCart }: CartSummaryProps 
     <div className="space-y-4 mb-6">
       <div className="flex justify-between text-stone-600">
         <span>Subtotal ({state.itemCount} items)</span>
-        <span>${total.toFixed(2)}</span>
+        <span>${totalAmount.toFixed(2)}</span>
+      </div>
+      
+      <div className="space-y-2">
+        <label className="block text-stone-600 font-medium">Shipping Method</label>
+        <select
+          value={shippingMethod}
+          onChange={(e) => setShippingMethod(e.target.value)}
+          className="w-full p-3 border-2 border-stone-300 rounded-xl focus:ring-2 focus:ring-stone-400 focus:border-stone-500 bg-white text-stone-700 font-quicksand"
+        >
+          <option value="STANDARD">Standard ({shippingInfo.duration} days) - ${shippingInfo.baseCost}</option>
+          <option value="EXPRESS">Express ({methodsShipping.EXPRESS.duration} days) - ${methodsShipping.EXPRESS.baseCost}</option>
+          <option value="OVERNIGHT">Overnight ({methodsShipping.OVERNIGHT.duration} days) - ${methodsShipping.OVERNIGHT.baseCost}</option>
+        </select>
       </div>
       
       <div className="flex justify-between text-stone-600">
-        <span>Shipping</span>
-        <span>
-          {shippingCost === 0 ? (
-            <span className="text-green-600 font-bold">FREE</span>
-          ) : (
-            `$${shippingCost.toFixed(2)}`
-          )}
-        </span>
+        <span>Shipping Cost</span>
+        <span>${shippingInfo.baseCost.toFixed(2)}</span>
       </div>
       
-      {total < shippingThreshold && (
-        <div className="text-sm text-amber-600 bg-amber-50 p-3 rounded-lg">
-          💡 Add ${(shippingThreshold - total).toFixed(2)} more for free shipping!
-        </div>
-      )}
       
       <div className="border-t border-stone-300 pt-4">
         <div className="flex justify-between text-xl font-bold text-stone-700">
           <span>Total</span>
-          <span>${finalTotal.toFixed(2)}</span>
+          <span>${totalAmount.toFixed(2)}</span>
         </div>
       </div>
     </div>

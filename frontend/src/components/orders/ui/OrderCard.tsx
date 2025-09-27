@@ -1,24 +1,27 @@
 'use client';
 
-import { useState } from 'react';
 
 interface OrderItem {
   id: number;
-  name: string;
-  price: number;
   quantity: number;
-  image?: string;
-  emoji?: string;
+  price: number;
+  product?: {
+    id: number;
+    name: string;
+    imageUrl?: string;
+  };
 }
 
 interface Order {
-  id: string;
-  date: string;
-  status: 'delivered' | 'processing' | 'shipped' | 'cancelled';
+  id: number;
+  createdAt: string;
+  status: 'PENDING' | 'CONFIRMED' | 'PROCESSING' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED';
   total: number;
   items: OrderItem[];
-  shippingAddress: string;
-  trackingNumber: string | null;
+  shipping?: {
+    address: string;
+    trackingNumber?: string;
+  };
 }
 
 interface OrderCardProps {
@@ -26,19 +29,22 @@ interface OrderCardProps {
 }
 
 const OrderCard = ({ order }: OrderCardProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
 
   // Get status color and text
   const getStatusInfo = (status: string) => {
     switch (status) {
-      case 'delivered':
+      case 'DELIVERED':
         return { color: 'text-green-600 bg-green-100', text: 'Delivered', icon: '✅' };
-      case 'processing':
+      case 'PROCESSING':
         return { color: 'text-blue-600 bg-blue-100', text: 'Processing', icon: '⏳' };
-      case 'shipped':
+      case 'SHIPPED':
         return { color: 'text-purple-600 bg-purple-100', text: 'Shipped', icon: '🚚' };
-      case 'cancelled':
+      case 'CANCELLED':
         return { color: 'text-red-600 bg-red-100', text: 'Cancelled', icon: '❌' };
+      case 'CONFIRMED':
+        return { color: 'text-yellow-600 bg-yellow-100', text: 'Confirmed', icon: '✅' };
+      case 'PENDING':
+        return { color: 'text-orange-600 bg-orange-100', text: 'Pending', icon: '⏳' };
       default:
         return { color: 'text-gray-600 bg-gray-100', text: 'Unknown', icon: '❓' };
     }
@@ -64,7 +70,7 @@ const OrderCard = ({ order }: OrderCardProps) => {
           Order #{order.id}
         </h3>
         <p className="text-stone-600 font-quicksand">
-          {formatDate(order.date)}
+          {formatDate(order.createdAt)}
         </p>
       </div>
       <div className="text-right">
@@ -86,22 +92,22 @@ const OrderCard = ({ order }: OrderCardProps) => {
         <div key={item.id} className="flex items-center space-x-4 p-3 bg-stone-50 rounded-xl">
           <div className="flex-shrink-0">
             <div className="w-12 h-12 rounded-lg overflow-hidden shadow-md">
-              {item.image ? (
+              {item.product?.imageUrl ? (
                 <img
-                  src={item.image}
-                  alt={item.name}
+                  src={item.product.imageUrl}
+                  alt={item.product.name}
                   className="w-full h-full object-cover"
                 />
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-stone-200 to-amber-200 flex items-center justify-center">
-                  <span className="text-2xl">{item.emoji || '🍽️'}</span>
+                  <span className="text-2xl">🍽️</span>
                 </div>
               )}
             </div>
           </div>
           <div className="flex-1 min-w-0">
             <h4 className="text-sm font-bold text-stone-700 font-poppins truncate">
-              {item.name}
+              {item.product?.name || 'Unknown Product'}
             </h4>
             <p className="text-stone-600 font-quicksand">
               Qty: {item.quantity} × ${item.price.toFixed(2)}
@@ -124,14 +130,14 @@ const OrderCard = ({ order }: OrderCardProps) => {
         <div>
           <h4 className="text-sm font-bold text-stone-700 mb-2 font-fredoka">Shipping Address</h4>
           <p className="text-stone-600 font-quicksand text-sm">
-            {order.shippingAddress}
+            {order.shipping?.address || 'No address provided'}
           </p>
         </div>
-        {order.trackingNumber && (
+        {order.shipping?.trackingNumber && (
           <div>
             <h4 className="text-sm font-bold text-stone-700 mb-2 font-fredoka">Tracking Number</h4>
             <p className="text-stone-600 font-quicksand text-sm font-mono">
-              {order.trackingNumber}
+              {order.shipping.trackingNumber}
             </p>
           </div>
         )}
@@ -139,43 +145,12 @@ const OrderCard = ({ order }: OrderCardProps) => {
     </div>
   );
 
-  // Render action buttons
-  const renderActionButtons = () => (
-    <div className="mt-6 pt-6 border-t border-stone-200">
-      <div className="flex flex-wrap gap-3">
-        <button className="px-4 py-2 bg-gradient-to-r from-stone-600 to-amber-600 text-white font-bold rounded-lg text-sm transition-all duration-300 hover:scale-105 hover:shadow-lg">
-          📦 Track Order
-        </button>
-        <button className="px-4 py-2 bg-stone-200 text-stone-700 font-bold rounded-lg text-sm transition-all duration-300 hover:bg-stone-300 hover:scale-105">
-          🔄 Reorder
-        </button>
-        {order.status === 'delivered' && (
-          <button className="px-4 py-2 bg-amber-200 text-amber-700 font-bold rounded-lg text-sm transition-all duration-300 hover:bg-amber-300 hover:scale-105">
-            ⭐ Leave Review
-          </button>
-        )}
-      </div>
-    </div>
-  );
 
   return (
     <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-2xl hover:shadow-3xl transition-all duration-500 border border-stone-200/50">
       {renderOrderHeader()}
-      
-      {isExpanded && (
-        <>
-          {renderOrderItems()}
-          {renderOrderDetails()}
-          {renderActionButtons()}
-        </>
-      )}
-
-      <button
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full mt-4 py-3 text-stone-600 font-bold rounded-xl transition-all duration-300 hover:bg-stone-100 hover:scale-105"
-      >
-        {isExpanded ? '🔼 Show Less' : '🔽 View Details'}
-      </button>
+      {renderOrderItems()}
+      {renderOrderDetails()}
     </div>
   );
 };

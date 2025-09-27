@@ -6,14 +6,12 @@ import { usePathname } from 'next/navigation';
 import { useFilter } from '@/contexts/FilterContext';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
-import ProfileModal from '@/components/profile/ProfileModal';
 import LoginModal from '@/components/auth/LoginModal';
 import RegisterModal from '@/components/auth/RegisterModal';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const pathname = usePathname();
@@ -30,9 +28,11 @@ const Header = () => {
   // Handle search submit
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Search is already handled by FilterContext
-    // This function can be used for additional search logic if needed
-    console.log('Search submitted:', filters.searchTerm);
+    // Redirect to menu page with search query as URL parameter
+    if (filters.searchTerm.trim()) {
+      const searchQuery = encodeURIComponent(filters.searchTerm.trim());
+      window.location.href = `/menu?search=${searchQuery}`;
+    }
   };
 
   // Handle clear search
@@ -51,11 +51,6 @@ const Header = () => {
     setIsProfileOpen(false);
   };
 
-  // Handle profile modal
-  const handleProfileClick = () => {
-    setIsProfileOpen(false);
-    setIsProfileModalOpen(true);
-  };
 
   // Handle login
   const handleLogin = () => {
@@ -126,7 +121,7 @@ const Header = () => {
                   : 'text-stone-700 hover:text-stone-600 bg-stone-200/50'
               }`}
             >
-              🏠 HOME
+              HOME
             </Link>
             <Link 
               href="/menu" 
@@ -136,18 +131,9 @@ const Header = () => {
                   : 'text-stone-700 hover:text-stone-600 bg-stone-200/50'
               }`}
             >
-              🥐 MENU
+              MENU
             </Link>
-            <Link 
-              href="/orders" 
-              className={`px-4 py-2 text-sm font-bold transition-all duration-300 hover:scale-110 rounded-full font-quicksand ${
-                pathname === '/orders' 
-                  ? 'text-white bg-gradient-to-r from-stone-600 to-amber-600 shadow-lg' 
-                  : 'text-stone-700 hover:text-stone-600 bg-stone-200/50'
-              }`}
-            >
-              📦 ORDERS
-            </Link>
+         
            
 
             <a 
@@ -161,7 +147,7 @@ const Header = () => {
                 });
               }}
             >
-              📞 CONTACT
+              CONTACT
             </a>
 
             
@@ -229,12 +215,6 @@ const Header = () => {
                         <p className="text-sm font-bold text-stone-800 font-fredoka">{user?.username}</p>
                         <p className="text-xs text-stone-600 font-quicksand">{user?.email}</p>
                       </div>
-                      <button
-                        className="block w-full text-left px-4 py-3 text-sm text-stone-700 hover:bg-stone-100 transition-colors font-quicksand"
-                        onClick={handleProfileClick}
-                      >
-                        👤 My Profile
-                      </button>
                       <Link
                         href="/orders"
                         className="block px-4 py-3 text-sm text-stone-700 hover:bg-stone-100 transition-colors font-quicksand"
@@ -352,11 +332,6 @@ const Header = () => {
         )}
       </div>
 
-      {/* Profile Modal */}
-      <ProfileModal
-        isOpen={isProfileModalOpen}
-        onClose={() => setIsProfileModalOpen(false)}
-      />
 
       {/* Auth Modals */}
       <LoginModal

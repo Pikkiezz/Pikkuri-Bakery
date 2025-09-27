@@ -228,13 +228,13 @@ export interface PaymentResult {
     quantity: number;
   }
 
-  // ------------ WishList Types ----------
-  export interface AddToWishListBody {
-    productId: number;
-  }
+  // // ------------ WishList Types ----------
+  // export interface AddToWishListBody {
+  //   productId: number;
+  // }
 
-  export interface WishListResponse {
-    id: number;
-    userId: number;
-    productId: number;
-  }
+  // export interface WishListResponse {
+  //   id: number;
+  //   userId: number;
+  //   productId: number;
+  // }

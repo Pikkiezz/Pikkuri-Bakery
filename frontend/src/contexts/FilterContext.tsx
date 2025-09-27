@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useProduct } from './ProductContext';
 import { useCategory } from './CategoryContext';
 
@@ -46,6 +47,15 @@ export const FilterProvider = ({ children }: { children: ReactNode }) => {
   const [filters, setFilters] = useState<FilterState>(initialState);
   const { productsData } = useProduct();
   const { categories } = useCategory();
+  const searchParams = useSearchParams();
+
+  // Read search query from URL parameters
+  useEffect(() => {
+    const searchQuery = searchParams.get('search');
+    if (searchQuery) {
+      setFilters(prev => ({ ...prev, searchTerm: searchQuery }));
+    }
+  }, [searchParams]);
 
   // Update price range based on actual product data
   useEffect(() => {

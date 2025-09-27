@@ -12,6 +12,7 @@ export interface CheckoutItem {
 export interface CheckoutRequest {
   items: CheckoutItem[];
   shippingAddress: string;
+  phone: string;
   paymentMethod: string;
   total: number;
 }
@@ -26,24 +27,19 @@ export interface CheckoutResponse {
 export class CheckoutService {
   async processCheckout(data: CheckoutRequest): Promise<CheckoutResponse> {
     try {
-      // TODO: Implement checkout API when backend is ready
-      // const response = await apiClient.post<CheckoutResponse>(
-      //   API_CONFIG.ENDPOINTS.CHECKOUT.PROCESS,
-      //   data
-      // );
-      // return response;
+      // Call real checkout API
+      const response = await apiClient.post<CheckoutResponse>(
+        '/carts/checkout',
+        {
+          itemIds: data.items.map(item => item.id),
+          shippingAddress: data.shippingAddress,
+          phone: data.phone,
+          paymentMethod: data.paymentMethod,
+          shippingMethod: 'STANDARD' // Default shipping method
+        }
+      );
+      return response.data;
       
-      // Mock implementation
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            orderId: `ORDER-${Date.now()}`,
-            status: 'pending',
-            message: 'Order placed successfully (mock)',
-            trackingNumber: `TRK-${Date.now()}`
-          });
-        }, 1000);
-      });
     } catch (error) {
       console.error('Checkout failed:', error);
       throw new Error('Failed to process checkout. Please try again.');

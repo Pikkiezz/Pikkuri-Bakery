@@ -47,7 +47,7 @@ const MenuItemCard = ({ item, quantity, onQuantityChange }: MenuItemCardProps) =
             {item.description}
           </p>
           <h1 className="text-xl font-bold bg-gradient-to-r from-stone-600 to-amber-600 bg-clip-text text-transparent mb-4">
-            ${item.price}
+            {item.price} ฿
           </h1>
 
 

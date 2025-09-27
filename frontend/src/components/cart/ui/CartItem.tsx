@@ -58,7 +58,7 @@ const CartItem = ({ item, onUpdateQuantity, onRemoveItem }: CartItemProps) => {
         {item.name}
       </h3>
       <p className="text-stone-600 font-quicksand">
-        ${item.price} each
+        {item.price} ฿ per piece
       </p>
     </div>
   );

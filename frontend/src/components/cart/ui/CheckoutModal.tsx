@@ -15,6 +15,7 @@ const CheckoutModal = ({ isOpen, onClose }: CheckoutModalProps) => {
   const { state, clearCart } = useCart();
   const [isProcessing, setIsProcessing] = useState(false);
   const [shippingAddress, setShippingAddress] = useState('');
+  const [phone, setPhone] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('credit_card');
   const [error, setError] = useState<string | null>(null);
 
@@ -22,6 +23,11 @@ const CheckoutModal = ({ isOpen, onClose }: CheckoutModalProps) => {
   const handleCheckout = async () => {
     if (!shippingAddress.trim()) {
       setError('Please enter your shipping address');
+      return;
+    }
+
+    if (!phone.trim()) {
+      setError('Please enter your phone number');
       return;
     }
 
@@ -39,6 +45,7 @@ const CheckoutModal = ({ isOpen, onClose }: CheckoutModalProps) => {
           emoji: item.emoji
         })),
         shippingAddress: shippingAddress.trim(),
+        phone: phone.trim(),
         paymentMethod,
         total: state.total
       };
@@ -138,6 +145,21 @@ const CheckoutModal = ({ isOpen, onClose }: CheckoutModalProps) => {
         />
       </div>
 
+      {/* Phone Number */}
+      <div className="mb-6">
+        <label className="block text-sm font-bold text-stone-700 mb-2 font-fredoka">
+          📞 Phone Number
+        </label>
+        <input
+          type="tel"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="Enter your phone number..."
+          className="w-full p-3 border-2 border-stone-300 rounded-xl focus:ring-2 focus:ring-stone-400 focus:border-stone-500 bg-white text-stone-700 placeholder-stone-500 font-quicksand"
+          disabled={isProcessing}
+        />
+      </div>
+
       {/* Payment Method */}
       <div className="mb-6">
         <label className="block text-sm font-bold text-stone-700 mb-2 font-fredoka">
@@ -149,10 +171,10 @@ const CheckoutModal = ({ isOpen, onClose }: CheckoutModalProps) => {
           className="w-full p-3 border-2 border-stone-300 rounded-xl focus:ring-2 focus:ring-stone-400 focus:border-stone-500 bg-white text-stone-700 font-quicksand"
           disabled={isProcessing}
         >
-          <option value="credit_card">Credit Card</option>
-          <option value="debit_card">Debit Card</option>
-          <option value="paypal">PayPal</option>
-          <option value="bank_transfer">Bank Transfer</option>
+          <option value="CREDIT_CARD">Credit Card</option>
+          <option value="E_WALLET">E-Wallet</option>
+          <option value="BANK_TRANSFER">Bank Transfer</option>
+          <option value="CASH_ON_DELIVERY">Cash on Delivery</option>
         </select>
       </div>
 
@@ -174,7 +196,7 @@ const CheckoutModal = ({ isOpen, onClose }: CheckoutModalProps) => {
         </button>
         <button
           onClick={handleCheckout}
-          disabled={isProcessing || !shippingAddress.trim()}
+          disabled={isProcessing || !shippingAddress.trim() || !phone.trim()}
           className="flex-1 px-4 py-3 bg-gradient-to-r from-stone-600 to-amber-600 text-white font-bold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isProcessing ? (

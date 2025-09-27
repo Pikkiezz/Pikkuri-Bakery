@@ -104,7 +104,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // Add item to cart
   const addToCart = async (productId: number, quantity: number = 1, productData?: { name: string; price: number; image?: string }) => {
     try {
-      console.log('Adding to cart:', { productId, quantity, productData });
       setIsLoading(true);
       setError(null);
       
@@ -113,9 +112,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         quantity: quantity
       };
       
-      console.log('Request:', request);
       await cartService.addToCart(request);
-      console.log('Added to cart successfully');
       await refreshCart(); // Refresh cart after adding
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to add item to cart');

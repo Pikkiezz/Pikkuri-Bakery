@@ -102,6 +102,8 @@ model Order {
   shipping  Shipping?
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
+  
+  @@map("orders")
 }
 
 model OrderItem {
@@ -112,6 +114,8 @@ model OrderItem {
   productId Int
   quantity  Int     @default(1)
   price     Float 
+  
+  @@map("orderitems")
 }
 
 model Payment {
@@ -125,6 +129,8 @@ model Payment {
   paidAt        DateTime?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+  
+  @@map("payments")
 }
 
 model Shipping {
@@ -140,6 +146,8 @@ model Shipping {
   deliveredAt DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  
+  @@map("shippings")
 }
 
 model Review {
